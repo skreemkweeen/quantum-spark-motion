@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/animated-slideshow";
 import vantaHero from "@/assets/vanta-hero.jpg";
 import elionInterface from "@/assets/elion-interface.png";
+import sipHero from "@/assets/sip-hero.png";
 
 export const PROJECTS = [
   {
@@ -26,8 +27,7 @@ export const PROJECTS = [
     slug: "sip-society",
     title: "SIP SOCIETY",
     tag: "Hospitality",
-    imageUrl:
-      "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2400&auto=format&fit=crop",
+    imageUrl: sipHero,
   },
   {
     slug: "nextrip",

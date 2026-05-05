@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import ProjectDetail from "./pages/ProjectDetail.tsx";
 import Vanta from "./pages/projects/Vanta.tsx";
 import Elion from "./pages/projects/Elion.tsx";
+import SipSociety from "./pages/projects/SipSociety.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/projects/vanta" element={<Vanta />} />
           <Route path="/projects/elion" element={<Elion />} />
+          <Route path="/projects/sip-society" element={<SipSociety />} />
           <Route path="/projects/:slug" element={<ProjectDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
