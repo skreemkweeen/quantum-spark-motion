@@ -5,8 +5,13 @@ export const Nav = () => (
     <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
       <a href="#top" className="text-sm"><GlitchLogo /></a>
       <nav className="hidden gap-8 text-xs uppercase tracking-[0.2em] text-[hsl(var(--muted-fg))] md:flex">
-        {["Work", "Studio", "Process", "Contact"].map((l) => (
-          <a key={l} href={`#${l.toLowerCase()}`} className="transition-opacity duration-200 hover:text-foreground">{l}</a>
+        {[
+          { label: "Home", href: "/#top" },
+          { label: "Work", href: "/#work" },
+          { label: "Contact", href: "/#contact" },
+          { label: "About", href: "/#about" },
+        ].map((l) => (
+          <a key={l.label} href={l.href} className="transition-opacity duration-200 hover:text-foreground">{l.label}</a>
         ))}
       </nav>
     </div>
