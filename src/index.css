@@ -8,8 +8,10 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 6%;
+    --foreground: 0 0% 96%;
+    --muted-fg: 0 0% 55%;
+    --accent-line: 0 0% 20%;
 
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -100,6 +102,66 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Inter", sans-serif;
   }
+}
+
+@layer utilities {
+  .glitch-layer {
+    position: absolute; inset: 0; pointer-events: none;
+    mix-blend-mode: screen;
+  }
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      hsl(0 0% 100% / 0.06) 0px,
+      hsl(0 0% 100% / 0.06) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+  .will-tx { will-change: transform; }
+}
+
+@keyframes glitch-r {
+  0%   { transform: translate(0,0); opacity: 0; }
+  20%  { transform: translate(1.5px, -1px); opacity: .9; }
+  40%  { transform: translate(-2px, 1px); opacity: .8; }
+  60%  { transform: translate(1px, 0); opacity: .7; }
+  100% { transform: translate(0,0); opacity: 0; }
+}
+@keyframes glitch-c {
+  0%   { transform: translate(0,0); opacity: 0; }
+  20%  { transform: translate(-1.5px, 1px); opacity: .9; }
+  40%  { transform: translate(2px, -1px); opacity: .8; }
+  60%  { transform: translate(-1px, 0); opacity: .7; }
+  100% { transform: translate(0,0); opacity: 0; }
+}
+@keyframes glitch-slice {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+  20% { clip-path: inset(10% 0 70% 0); transform: translateX(2px); }
+  40% { clip-path: inset(60% 0 20% 0); transform: translateX(-2px); }
+  60% { clip-path: inset(35% 0 45% 0); transform: translateX(1px); }
+  80% { clip-path: inset(80% 0 5% 0); transform: translateX(-1px); }
+}
+@keyframes scan-fade {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: .25; }
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(-6px); }
+  50%      { transform: translateY(6px); }
+}
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes divider-in {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
