@@ -4,6 +4,7 @@ import { Projects } from "@/components/sections/Projects";
 import { Devices } from "@/components/sections/Devices";
 import { Footer } from "@/components/sections/Footer";
 import Threads from "@/components/ui/threads";
+import { SectionDivider } from "@/components/SectionDivider";
 
 const Index = () => (
   <div className="min-h-screen bg-background text-foreground">
@@ -18,6 +19,7 @@ const Index = () => (
         </div>
       </div>
       <Projects />
+      <SectionDivider variant="deep" />
       <Devices />
     </main>
     <Footer />
