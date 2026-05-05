@@ -114,7 +114,7 @@ export default function ShowreelAdvanced() {
               className="relative aspect-video w-[90vw] max-w-5xl overflow-hidden rounded-sm border border-[hsl(var(--accent-line))] bg-black"
             >
               <video
-                src=""
+                src="https://res.cloudinary.com/dan1xbozd/video/upload/v1778015265/hf_20260505_200834_7873eeb8-103f-4832-aac7-bec85b693793_1_owfgeg.mp4"
                 autoPlay
                 controls
                 className="h-full w-full object-cover"
