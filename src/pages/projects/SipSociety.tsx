@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
+import { LiquidStack } from "@/components/LiquidStack";
 import sipHero from "@/assets/sip-hero.png";
 import sipSplash from "@/assets/sip-splash.png";
 import sipPackaging from "@/assets/sip-packaging.png";
@@ -61,14 +62,6 @@ const SipSociety = () => (
         </div>
       </section>
 
-      <Reveal delay={120}>
-        <section className="mx-auto mt-20 w-full max-w-7xl px-6">
-          <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-            <img src={sipHero} alt="Sip Society hero" className="h-full w-full object-cover" />
-          </div>
-        </section>
-      </Reveal>
-
       <section className="px-6 py-32">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-[1fr_2fr]">
           <Reveal>
@@ -84,97 +77,21 @@ const SipSociety = () => (
         </div>
       </section>
 
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Packaging System</h2>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-              <img src={sipPackaging} alt="Sip Society packaging system" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Product Photography</h2>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-              <img src={sipSplash} alt="Sip Society splash photography" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Web Experience</h2>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <div className="grid grid-cols-1 gap-6">
-            <Reveal delay={100}>
-              <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-                <img src={sipFlavorSystem} alt="Sip Society flavor system page" className="h-full w-full object-cover" />
-              </div>
-            </Reveal>
-            <Reveal delay={160}>
-              <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-                <img src={sipFlavors} alt="Sip Society flavors page" className="h-full w-full object-cover" />
-              </div>
-            </Reveal>
-            <Reveal delay={220}>
-              <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-                <img src={sipBenefits} alt="Sip Society benefits page" className="h-full w-full object-cover" />
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Mobile App</h2>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-              <img src={sipApp} alt="Sip Society mobile app screens" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Campaign</h2>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <Reveal delay={100}>
-            <div className="mx-auto max-w-2xl overflow-hidden rounded-sm bg-[hsl(0_0%_5%)]">
-              <img src={sipAd} alt="Sip Society social ad" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <LiquidStack
+        className="pb-24"
+        overlap={14}
+        baseTone="40 30% 96%"
+        images={[
+          { src: sipHero, alt: "Sip Society hero", ratio: 16 / 10, tone: "20 80% 88%" },
+          { src: sipPackaging, alt: "Sip Society packaging system", ratio: 16 / 10, tone: "350 70% 85%" },
+          { src: sipSplash, alt: "Sip Society splash photography", ratio: 16 / 10, tone: "50 90% 80%" },
+          { src: sipFlavorSystem, alt: "Sip Society flavor system page", ratio: 16 / 10, tone: "90 60% 80%" },
+          { src: sipFlavors, alt: "Sip Society flavors page", ratio: 16 / 10, tone: "20 90% 82%" },
+          { src: sipBenefits, alt: "Sip Society benefits page", ratio: 16 / 10, tone: "30 70% 90%" },
+          { src: sipApp, alt: "Sip Society mobile app screens", ratio: 16 / 10, tone: "200 50% 88%" },
+          { src: sipAd, alt: "Sip Society social ad", ratio: 4 / 5, tone: "350 75% 85%" },
+        ]}
+      />
 
       <section className="border-t border-[hsl(var(--accent-line))] px-6 py-24">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
