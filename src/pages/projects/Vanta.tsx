@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
+import { BlendStack } from "@/components/BlendStack";
 import vantaHero from "@/assets/vanta-hero.jpg";
 import vantaApp from "@/assets/vanta-app.png";
 import vantaScreens from "@/assets/vanta-screens.png";
@@ -43,14 +44,6 @@ const Vanta = () => (
         </div>
       </section>
 
-      <Reveal delay={120}>
-        <div className="mx-auto mt-20 w-full max-w-7xl px-6">
-          <div className="aspect-[16/10] overflow-hidden rounded-sm bg-[hsl(0_0%_8%)]">
-            <img src={vantaHero} alt="Vanta Supply website hero" className="h-full w-full object-cover" />
-          </div>
-        </div>
-      </Reveal>
-
       <section className="px-6 py-32">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-[1fr_2fr]">
           <Reveal><h3 className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Overview</h3></Reveal>
@@ -62,41 +55,17 @@ const Vanta = () => (
         </div>
       </section>
 
-      <section className="px-6 pb-32">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2">
-          <Reveal>
-            <div className="aspect-[4/5] overflow-hidden rounded-sm bg-[hsl(0_0%_8%)]">
-              <img src={vantaFront} alt="Vanta hoodie front" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="aspect-[4/5] overflow-hidden rounded-sm bg-[hsl(0_0%_8%)]">
-              <img src={vantaBack} alt="Vanta hoodie back" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="px-6 pb-32">
-        <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <div className="mb-12 flex items-end justify-between">
-              <h3 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">Drop App</h3>
-              <div className="h-px w-40 bg-[hsl(var(--accent-line))]" />
-            </div>
-          </Reveal>
-          <Reveal delay={120}>
-            <div className="overflow-hidden rounded-sm bg-[hsl(0_0%_4%)]">
-              <img src={vantaApp} alt="Vanta app mockup" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-          <Reveal delay={200}>
-            <div className="mt-8 overflow-hidden rounded-sm bg-[hsl(0_0%_4%)]">
-              <img src={vantaScreens} alt="Vanta app screens" className="h-full w-full object-cover" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <BlendStack
+        className="pb-32"
+        overlap={14}
+        images={[
+          { src: vantaHero, alt: "Vanta Supply website hero", ratio: 16 / 10 },
+          { src: vantaFront, alt: "Vanta hoodie front", ratio: 4 / 5 },
+          { src: vantaBack, alt: "Vanta hoodie back", ratio: 4 / 5 },
+          { src: vantaApp, alt: "Vanta app mockup", ratio: 16 / 10 },
+          { src: vantaScreens, alt: "Vanta app screens", ratio: 16 / 9 },
+        ]}
+      />
 
       <section className="border-t border-[hsl(var(--accent-line))] px-6 py-24">
         <div className="mx-auto flex max-w-7xl items-center justify-between">
