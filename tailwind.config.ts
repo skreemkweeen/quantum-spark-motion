@@ -80,10 +80,38 @@ export default {
             height: "0",
           },
         },
+        "glitch-r": {
+          "0%,100%": { transform: "translate(0,0)", opacity: "0" },
+          "20%": { transform: "translate(1.5px,-1px)", opacity: ".9" },
+          "60%": { transform: "translate(1px,0)", opacity: ".7" },
+        },
+        "glitch-c": {
+          "0%,100%": { transform: "translate(0,0)", opacity: "0" },
+          "20%": { transform: "translate(-1.5px,1px)", opacity: ".9" },
+          "60%": { transform: "translate(-1px,0)", opacity: ".7" },
+        },
+        "glitch-slice": {
+          "0%,100%": { clipPath: "inset(0 0 0 0)", transform: "translateX(0)" },
+          "40%": { clipPath: "inset(60% 0 20% 0)", transform: "translateX(-2px)" },
+          "80%": { clipPath: "inset(80% 0 5% 0)", transform: "translateX(-1px)" },
+        },
+        "float-y": {
+          "0%,100%": { transform: "translateY(-6px)" },
+          "50%": { transform: "translateY(6px)" },
+        },
+        "reveal-up": {
+          from: { opacity: "0", transform: "translateY(16px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "glitch-r": "glitch-r 0.32s steps(4,end) 1",
+        "glitch-c": "glitch-c 0.32s steps(4,end) 1",
+        "glitch-slice": "glitch-slice 0.32s steps(4,end) 1",
+        "float-y": "float-y 6s ease-in-out infinite",
+        "reveal-up": "reveal-up 0.6s ease-out both",
       },
     },
   },
