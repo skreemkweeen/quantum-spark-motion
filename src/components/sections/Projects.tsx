@@ -6,14 +6,14 @@ import {
   HoverSliderImageWrap,
   TextStaggerHover,
 } from "@/components/ui/animated-slideshow";
+import vantaHero from "@/assets/vanta-hero.jpg";
 
 export const PROJECTS = [
   {
     slug: "vanta",
     title: "VANTA",
     tag: "Brand · Web",
-    imageUrl:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2400&auto=format&fit=crop",
+    imageUrl: vantaHero,
   },
   {
     slug: "elion",
