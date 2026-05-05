@@ -162,6 +162,16 @@ All colors MUST be HSL.
   to   { transform: scaleX(1); }
 }
 
+@keyframes drift-up {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  100% { transform: translateY(-120px) translateX(8px); opacity: 0; }
+}
+
+.animate-drift {
+  animation: drift-up linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
