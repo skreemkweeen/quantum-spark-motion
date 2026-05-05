@@ -7,6 +7,7 @@ import {
   TextStaggerHover,
 } from "@/components/ui/animated-slideshow";
 import vantaHero from "@/assets/vanta-hero.jpg";
+import elionInterface from "@/assets/elion-interface.png";
 
 export const PROJECTS = [
   {
@@ -19,8 +20,7 @@ export const PROJECTS = [
     slug: "elion",
     title: "ELION",
     tag: "Product · iOS",
-    imageUrl:
-      "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=2400&auto=format&fit=crop",
+    imageUrl: elionInterface,
   },
   {
     slug: "sip-society",
