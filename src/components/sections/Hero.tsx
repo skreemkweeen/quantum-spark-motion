@@ -1,5 +1,6 @@
 import { Parallax } from "@/components/Parallax";
 import { Reveal } from "@/components/Reveal";
+import ShowreelAdvanced from "@/components/ShowreelAdvanced";
 
 const stats = [
   { v: "12+", l: "Years" },
@@ -21,6 +22,11 @@ export const Hero = () => (
         </Reveal>
         <Reveal delay={200}>
           <p className="mt-8 max-w-md text-sm leading-relaxed text-[hsl(var(--muted-fg))]">We design and engineer interactive systems for brands that treat detail as a discipline.</p>
+        </Reveal>
+        <Reveal delay={320}>
+          <div className="mt-12">
+            <ShowreelAdvanced />
+          </div>
         </Reveal>
       </Parallax>
       <Parallax speed={1.1} className="flex flex-col justify-end gap-8 md:items-end">
