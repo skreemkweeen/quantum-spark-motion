@@ -79,7 +79,7 @@ const SipSociety = () => (
 
       <LiquidStack
         className="pb-24"
-        overlap={14}
+        overlap={100}
         baseTone="40 30% 96%"
         images={[
           { src: sipHero, alt: "Sip Society hero", ratio: 16 / 10, tone: "20 80% 88%" },
