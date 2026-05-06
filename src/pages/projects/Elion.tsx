@@ -173,6 +173,10 @@ const Elion = () => (
         </div>
       </section>
     </main>
+    <ProjectFooterRibbon
+      title="ELION"
+      phrases={["LUXURY AUDIO", "INDUSTRIAL DESIGN", "IMMERSIVE SOUND"]}
+    />
     <Footer />
   </div>
 );
