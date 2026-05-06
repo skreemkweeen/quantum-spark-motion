@@ -3,6 +3,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
 import { BlendStack } from "@/components/BlendStack";
+import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
 import vantaHero from "@/assets/vanta-hero.jpg";
 import vantaApp from "@/assets/vanta-app.png";
 import vantaScreens from "@/assets/vanta-screens.png";
@@ -74,6 +75,10 @@ const Vanta = () => (
         </div>
       </section>
     </main>
+    <ProjectFooterRibbon
+      title="VANTA"
+      phrases={["DIGITAL FASHION", "DROP SYSTEM", "CYBER STREETWEAR", "UI/UX"]}
+    />
     <Footer />
   </div>
 );
