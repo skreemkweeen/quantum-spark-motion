@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
+import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
 import elionInterface from "@/assets/elion-interface.png";
 import elionBrandSystem from "@/assets/elion-brand-system.png";
 import elionSoundbarSystem from "@/assets/elion-soundbar-system.png";
