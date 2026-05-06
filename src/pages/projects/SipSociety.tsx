@@ -3,6 +3,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
 import { LiquidStack } from "@/components/LiquidStack";
+import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
 import sipHero from "@/assets/sip-hero.png";
 import sipSplash from "@/assets/sip-splash.png";
 import sipPackaging from "@/assets/sip-packaging.png";
@@ -104,6 +105,11 @@ const SipSociety = () => (
         </div>
       </section>
     </main>
+    <ProjectFooterRibbon
+      title="SIP SOCIETY"
+      theme="warm"
+      phrases={["FUNCTIONAL SODA", "BRAND SYSTEM", "PACKAGING", "UI/UX"]}
+    />
     <Footer />
   </div>
 );
