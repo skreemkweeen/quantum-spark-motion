@@ -3,6 +3,12 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
 import { PROJECTS } from "@/components/sections/Projects";
+import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
+
+const PHRASES_BY_SLUG: Record<string, string[]> = {
+  nextrip: ["TRAVEL PLATFORM", "MOBILE EXPERIENCE", "FLIGHT SYSTEM"],
+  "11ven": ["CULTURE", "FASHION", "IDENTITY", "EXPERIENCE"],
+};
 
 const ProjectDetail = () => {
   const { slug } = useParams();
@@ -20,6 +26,8 @@ const ProjectDetail = () => {
       </div>
     );
   }
+
+  const phrases = PHRASES_BY_SLUG[project.slug] ?? [project.tag.toUpperCase()];
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -54,6 +62,7 @@ const ProjectDetail = () => {
           </Reveal>
         </div>
       </main>
+      <ProjectFooterRibbon title={project.title.toUpperCase()} phrases={phrases} />
       <Footer />
     </div>
   );
