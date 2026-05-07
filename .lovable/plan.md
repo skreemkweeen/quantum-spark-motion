@@ -1,78 +1,108 @@
-## ProjectFooterRibbon — Global Cinematic Marquee
+# Cinematic Project Footer System
 
-A reusable React + Tailwind component injected at the bottom of every project page (above the existing site `Footer`). It renders two layered infinite marquees with cinematic ambience (grain, scanlines, vignette, light streaks) on pure black.
+Replace the current `ProjectFooterRibbon` + global `Footer` on three project pages with a richer, layered footer composition. All deps already installed (`framer-motion`, `lucide-react`, `react-router-dom`).
 
-### New file: `src/components/ProjectFooterRibbon.tsx`
+## New folder: `src/components/footer/`
 
-Props:
-```ts
-type Props = {
-  title: string;
-  phrases?: string[];      // joined with " — "
-  speed?: number;          // px/sec for front ribbon (default 60)
-  theme?: "default" | "warm" | "cool";
-  className?: string;
-};
-```
+### 1. `GrainOverlay.tsx`
+Fixed-size canvas that fills its parent (via `ResizeObserver`). Throttled `requestAnimationFrame` loop (default 20fps) writes per-pixel random RGBA noise via `createImageData`/`putImageData`. Renders `<canvas>` absolutely positioned `inset-0`, `pointer-events-none`, `mix-blend-overlay`, with `style={{ opacity }}`. Props: `opacity=0.04`, `fps=20`. Typed `useRef<HTMLCanvasElement>(null)`.
 
-Structure (single section, full-bleed black, no border):
+### 2. `CursorGlow.tsx`
+Two layered radial-gradient blobs that follow the cursor with spring smoothing inside `containerRef`. Uses `useMotionValue` + `useSpring` (stiffness 45, damping 22, mass 0.7). Outer halo (size ~820px, soft purple `radial-gradient(circle, rgba(accent, opacity) 0%, transparent 60%)`), inner core (~22% size, brighter). Both `pointer-events-none`, `absolute`, `mix-blend-screen`. Mouse listeners on the container; reset off-screen on `mouseleave`.
+
+### 3. `FooterTransitionVeil.tsx`
+Top-of-footer transition: ~30vh tall section above the main footer body. Uses `useScroll({ target: ref, offset: ['start end', 'end center'] })` to drive opacity of:
+- A black gradient (`linear-gradient(to bottom, transparent, #000)`) — main veil
+- A vertical light beam (`linear-gradient(180deg, rgba(accent,0.6), transparent)`) translating downward
+- A radial haze at top center
+Plus a thin 1px horizontal accent line near the bottom edge fading in last.
+
+### 4. `HolographicRibbon.tsx`
+Marquee text track. Builds `segment = [title, ...phrases].join(' — ') + ' — '`, renders `doubled = segment + segment` inside a flex track animated with framer-motion `animate={{ x: [animFrom, animTo] }}` (linear, infinite). Hovering slows it ~2.8x by lengthening the duration via `transition={{ duration }}`. Two sizes:
+- `large`: huge bold display (`clamp(2.6rem, 6.5vw, 5.2rem)`, weight 900, tight tracking, glow `text-shadow`)
+- `small`: small caps (`clamp(0.75rem, 1.8vw, 1.4rem)`, weight 700, wide tracking, no glow)
+Wrapper: `relative w-full overflow-hidden whitespace-nowrap`, edge mask `linear-gradient(to right, transparent, black 8%, black 92%, transparent)`. Reverse direction supported.
+
+### 5. `DepthField.tsx`
+Canvas particle field. ~58 particles each with depth, size, drift, fade-in/out lifecycle. Two faint vertical light shafts as background gradients drawn each frame. Mouse parallax via container-relative `mouseRef` (offset scaled by `depth`). Particles >0.65 depth get a small radial halo. Respawns at bottom when out-of-bounds. Returns `<canvas absolute inset-0 pointer-events-none>`.
+
+### 6. `FooterTypography.tsx`
+Centered editorial CTA block, triggered by `useInView(ref, { once: true, margin: '-8% 0px' })`.
+- Massive ghost word behind (huge, ultra-low-opacity, `clamp(8rem, 22vw, 22rem)`)
+- Eyebrow line: small caps "Ready to create" + thin animated line + arrow
+- Headline (`ctaText`) with **per-word stagger reveal** (split on spaces; each word in `overflow-hidden` span with `motion.span` animating `y: 105% → 0%`, `rotateX 12 → 0`, opacity)
+- Sub-copy paragraph fading up
+- Stagger via `containerVariants` (staggerChildren 0.11, delay 0.18)
+
+### 7. `FooterNavigation.tsx`
+Three-column grid (Navigation / Next Project / Contact), animated in via `useInView`:
+- Navigation: "Back to Work" link to `/#work` with `ArrowRight`
+- Next Project: optional `{ title, slug }` linking to `/projects/{slug}` with `ArrowUpRight`
+- Contact: `mailto:` link with `ArrowUpRight`
+Bottom row: `MapPin` + location on left, `© {year} {copyrightName}. All rights reserved.` on right. Thin top divider line. Hover: subtle accent color shift on links.
+
+### 8. `CinematicProjectFooter.tsx`
+Composes everything. Single `containerRef` shared with `CursorGlow` + `DepthField`. Structure:
+
 ```text
-<section> (relative, h-[90px] md:h-[130px], bg-black, overflow-hidden)
-  ├─ vignette layer        (radial-gradient, pointer-events-none)
-  ├─ scanlines layer       (repeating-linear-gradient, slow translateY anim)
-  ├─ light streaks layer   (2–3 thin horizontal gradients drifting x, very low opacity)
-  ├─ back ribbon           (larger ~10vw text, blur-[6px], opacity-10, slower, slight Y offset)
-  ├─ front ribbon          (uppercase ~3vw text, white, font-semibold tracking-wide)
-  └─ grain overlay         (SVG fractalNoise, mix-blend-overlay, opacity ~0.08)
+<>
+  <FooterTransitionVeil accentColor={accent} />
+  <section ref={containerRef} className="relative overflow-hidden bg-black text-white">
+    <DepthField containerRef={containerRef} count={58} />
+    <CursorGlow containerRef={containerRef} color={accent} size={820} opacity={0.12} />
+    <div className="relative z-10">
+      <HolographicRibbon size="large" title={projectTitle} phrases={ribbonPhrases} accentColor={accent} />
+      <FooterTypography ctaText={ctaText} accentColor={accent} />
+      <HolographicRibbon size="small" title={projectTitle} phrases={ribbonPhrases} reverse accentColor={accent} />
+      <FooterNavigation nextProject={nextProject} email={email} location={location} copyrightName={copyrightName} accentColor={accent} />
+    </div>
+    <GrainOverlay opacity={0.04} fps={20} />
+  </section>
+</>
 ```
 
-Marquee technique:
-- Each ribbon = flex row with the phrase string duplicated 2× back-to-back.
-- Animate via `requestAnimationFrame`, mutating `transform: translate3d(x,0,0)` where `x = -(progress % halfWidth)`. This guarantees seamless loop regardless of text length.
-- Speed driven by prop; back ribbon runs at `speed * 0.45` in opposite direction for parallax feel.
-- Pause/slow on hover: ref-tracked `hoverRef` multiplies speed by 0.35; CSS class adds subtle `text-shadow` glow and bumps streak opacity.
-- Respects `prefers-reduced-motion` (static, no rAF loop).
+Accent map: `default '140, 80, 255'`, `warm '255, 130, 55'`, `cool '55, 140, 255'`.
 
-Edge masking on the marquee container:
-```css
-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
--webkit-mask-image: same;
+## Page integrations
+
+In each project page:
+- Remove `ProjectFooterRibbon` import + usage
+- Remove the global `Footer` import + usage (the cinematic footer fully replaces it on these pages)
+- Remove the existing in-page bottom "Back to Work / Next" `<section>` since `FooterNavigation` now handles that
+- Add `import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter"` and render at the bottom of `<main>`'s sibling area
+
+**Vanta.tsx**:
+```tsx
+<CinematicProjectFooter
+  projectTitle="VANTA"
+  ribbonPhrases={["DIGITAL FASHION", "DROP SYSTEM", "CYBER STREETWEAR", "UI/UX"]}
+  nextProject={{ title: "Elion", slug: "elion" }}
+/>
 ```
 
-Phrase composition:
-- If `phrases` provided → `[title, ...phrases].join(" — ") + " — "`.
-- Repeated enough times within one track to overflow viewport (compute on mount via `scrollWidth`, append clones until ≥ 2× viewport width).
-
-### CSS additions: `src/index.css`
-- `@keyframes scan-drift` (translateY 0 → 4px, 8s linear infinite) for scanlines.
-- `@keyframes streak-drift` (translateX -20% → 120%, 14s/22s linear infinite) for light streaks.
-- No new keyframes for the marquees themselves (handled by rAF).
-
-### Integration
-
-Add `<ProjectFooterRibbon … />` directly above `<Footer />` in:
-- `src/pages/projects/Vanta.tsx` — title `"VANTA"`, phrases `["DIGITAL FASHION","DROP SYSTEM","CYBER STREETWEAR","UI/UX"]`
-- `src/pages/projects/SipSociety.tsx` — `"SIP SOCIETY"`, `["FUNCTIONAL SODA","BRAND SYSTEM","PACKAGING","UI/UX"]`
-- `src/pages/projects/Elion.tsx` — `"ELION"`, `["LUXURY AUDIO","INDUSTRIAL DESIGN","IMMERSIVE SOUND"]`
-- `src/pages/ProjectDetail.tsx` (catch-all for `nextrip`, `11ven`, etc.) — derive phrases from a small map keyed by `slug`, with a sensible default using `project.tag`.
-
-Map (inside `ProjectDetail.tsx` or a tiny `src/lib/projectPhrases.ts`):
-```ts
-{
-  nextrip: ["TRAVEL PLATFORM","MOBILE EXPERIENCE","FLIGHT SYSTEM"],
-  "11ven": ["CULTURE","FASHION","IDENTITY","EXPERIENCE"],
-  // fallback: [project.tag]
-}
+**Elion.tsx**:
+```tsx
+<CinematicProjectFooter
+  projectTitle="ELION"
+  ribbonPhrases={["LUXURY AUDIO", "INDUSTRIAL DESIGN", "IMMERSIVE SOUND"]}
+  nextProject={{ title: "Sip Society", slug: "sip-society" }}
+/>
 ```
 
-### Performance / a11y
-- Only `transform` and `opacity` animated → GPU compositor, no layout.
-- `will-change: transform` on both ribbon tracks; removed on unmount.
-- Single rAF loop instance shared by both ribbons (one effect, two refs).
-- `aria-hidden="true"` on ambience layers; ribbon has `role="marquee"` + visually-hidden text label `"{title} — themes"`.
-- Reduced-motion: static text, no streaks/scanline animation.
+**SipSociety.tsx**:
+```tsx
+<CinematicProjectFooter
+  projectTitle="SIP SOCIETY"
+  ribbonColor="warm"
+  ribbonPhrases={["FUNCTIONAL SODA", "BRAND SYSTEM", "PACKAGING", "UI/UX"]}
+  nextProject={{ title: "Nextrip", slug: "nextrip" }}
+/>
+```
 
-### Out of scope
-- No changes to the global site `Footer` (`contact` section).
-- No GSAP dependency added — rAF is sufficient and lighter.
-- Does not auto-mount via a router wrapper; explicitly placed per project page (4 small edits) so each page can pass tailored phrases without prop-drilling through routing.
+`ProjectDetail.tsx` (catch-all) keeps the existing `ProjectFooterRibbon` for now — out of scope.
+
+## Notes
+- All canvases respect `prefers-reduced-motion` is not in original spec; skipping unless requested.
+- Type all `useRef`s with proper element generics (`HTMLCanvasElement`, `HTMLDivElement`, `HTMLElement`).
+- No new CSS keyframes needed — framer-motion handles all animation; grain/particles are canvas.
+- No new dependencies.
