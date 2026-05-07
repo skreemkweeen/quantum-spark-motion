@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
 import { Reveal } from "@/components/Reveal";
-import { BlendStack } from "@/components/BlendStack";
+import { VantaSectionDivider } from "@/components/VantaSectionDivider";
 import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import vantaHero from "@/assets/vanta-hero.jpg";
 import vantaApp from "@/assets/vanta-app.png";
@@ -55,17 +55,24 @@ const Vanta = () => (
         </div>
       </section>
 
-      <BlendStack
-        className="pb-32"
-        overlap={14}
-        images={[
-          { src: vantaHero, alt: "Vanta Supply website hero", ratio: 16 / 10 },
-          { src: vantaFront, alt: "Vanta hoodie front", ratio: 4 / 5 },
-          { src: vantaBack, alt: "Vanta hoodie back", ratio: 4 / 5 },
-          { src: vantaApp, alt: "Vanta app mockup", ratio: 16 / 10 },
-          { src: vantaScreens, alt: "Vanta app screens", ratio: 16 / 9 },
-        ]}
-      />
+      <div className="pb-32">
+        <div className="w-full">
+          <img src={vantaHero} alt="Vanta Supply website hero" className="w-full object-cover" style={{ aspectRatio: '16/10' }} />
+        </div>
+        <VantaSectionDivider />
+        <div className="grid grid-cols-2">
+          <img src={vantaFront} alt="Vanta hoodie front" className="w-full object-cover" style={{ aspectRatio: '4/5' }} />
+          <img src={vantaBack} alt="Vanta hoodie back" className="w-full object-cover" style={{ aspectRatio: '4/5' }} />
+        </div>
+        <VantaSectionDivider />
+        <div className="w-full">
+          <img src={vantaApp} alt="Vanta app mockup" className="w-full object-cover" style={{ aspectRatio: '16/10' }} />
+        </div>
+        <VantaSectionDivider />
+        <div className="w-full">
+          <img src={vantaScreens} alt="Vanta app screens" className="w-full object-cover" style={{ aspectRatio: '16/9' }} />
+        </div>
+      </div>
     </main>
     <CinematicProjectFooter
       projectTitle="VANTA"
