@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
 import { BlendStack } from "@/components/BlendStack";
-import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
+import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import vantaHero from "@/assets/vanta-hero.jpg";
 import vantaApp from "@/assets/vanta-app.png";
 import vantaScreens from "@/assets/vanta-screens.png";
@@ -67,19 +66,12 @@ const Vanta = () => (
           { src: vantaScreens, alt: "Vanta app screens", ratio: 16 / 9 },
         ]}
       />
-
-      <section className="border-t border-[hsl(var(--accent-line))] px-6 py-24">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link to="/#work" className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))] hover:text-foreground">← Back to Work</Link>
-          <Link to="/projects/elion" className="text-[10px] uppercase tracking-[0.3em] hover:text-[hsl(var(--muted-fg))]">Next: Elion →</Link>
-        </div>
-      </section>
     </main>
-    <ProjectFooterRibbon
-      title="VANTA"
-      phrases={["DIGITAL FASHION", "DROP SYSTEM", "CYBER STREETWEAR", "UI/UX"]}
+    <CinematicProjectFooter
+      projectTitle="VANTA"
+      ribbonPhrases={["DIGITAL FASHION", "DROP SYSTEM", "CYBER STREETWEAR", "UI/UX"]}
+      nextProject={{ title: "Elion", slug: "elion" }}
     />
-    <Footer />
   </div>
 );
 
