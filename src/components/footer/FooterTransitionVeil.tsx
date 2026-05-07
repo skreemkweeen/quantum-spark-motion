@@ -15,7 +15,12 @@ export function FooterTransitionVeil({ accentColor = "80, 50, 180" }: FooterTran
   const beamY = useTransform(scrollYProgress, [0, 1], ["-12%", "0%"]);
 
   return (
-    <div ref={ref} aria-hidden className="relative h-[30vh] w-full overflow-hidden bg-transparent">
+    <div
+      ref={ref}
+      aria-hidden
+      className="relative w-full overflow-hidden bg-transparent pointer-events-none"
+      style={{ height: 420, marginTop: -320, position: "relative", zIndex: 10 }}
+    >
       <motion.div
         className="absolute inset-0"
         style={{
