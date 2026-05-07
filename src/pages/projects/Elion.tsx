@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
-import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
+import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import elionInterface from "@/assets/elion-interface.png";
 import elionBrandSystem from "@/assets/elion-brand-system.png";
 import elionSoundbarSystem from "@/assets/elion-soundbar-system.png";
@@ -162,22 +161,12 @@ const Elion = () => (
         </div>
       </section>
 
-      <section className="border-t border-[hsl(var(--accent-line))] px-6 py-24">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link to="/#work" className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))] hover:text-foreground">
-            ← Back to Work
-          </Link>
-          <Link to="/projects/sip-society" className="text-[10px] uppercase tracking-[0.3em] hover:text-[hsl(var(--muted-fg))]">
-            Next: Sip Society →
-          </Link>
-        </div>
-      </section>
     </main>
-    <ProjectFooterRibbon
-      title="ELION"
-      phrases={["LUXURY AUDIO", "INDUSTRIAL DESIGN", "IMMERSIVE SOUND"]}
+    <CinematicProjectFooter
+      projectTitle="ELION"
+      ribbonPhrases={["LUXURY AUDIO", "INDUSTRIAL DESIGN", "IMMERSIVE SOUND"]}
+      nextProject={{ title: "Sip Society", slug: "sip-society" }}
     />
-    <Footer />
   </div>
 );
 
