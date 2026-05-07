@@ -1,9 +1,8 @@
 import { Link } from "react-router-dom";
 import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/sections/Footer";
 import { Reveal } from "@/components/Reveal";
 import { LiquidStack } from "@/components/LiquidStack";
-import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
+import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import sipHero from "@/assets/sip-hero.png";
 import sipSplash from "@/assets/sip-splash.png";
 import sipPackaging from "@/assets/sip-packaging.png";
@@ -93,24 +92,13 @@ const SipSociety = () => (
           { src: sipAd, alt: "Sip Society social ad", ratio: 4 / 5, tone: "350 75% 85%" },
         ]}
       />
-
-      <section className="border-t border-[hsl(var(--accent-line))] px-6 py-24">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <Link to="/#work" className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))] hover:text-foreground">
-            ← Back to Work
-          </Link>
-          <Link to="/projects/nextrip" className="text-[10px] uppercase tracking-[0.3em] hover:text-[hsl(var(--muted-fg))]">
-            Next: Nextrip →
-          </Link>
-        </div>
-      </section>
     </main>
-    <ProjectFooterRibbon
-      title="SIP SOCIETY"
-      theme="warm"
-      phrases={["FUNCTIONAL SODA", "BRAND SYSTEM", "PACKAGING", "UI/UX"]}
+    <CinematicProjectFooter
+      projectTitle="SIP SOCIETY"
+      ribbonColor="warm"
+      ribbonPhrases={["FUNCTIONAL SODA", "BRAND SYSTEM", "PACKAGING", "UI/UX"]}
+      nextProject={{ title: "Nextrip", slug: "nextrip" }}
     />
-    <Footer />
   </div>
 );
 
