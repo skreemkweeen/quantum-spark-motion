@@ -43,7 +43,7 @@ export function CinematicProjectFooter({
       <section
         ref={containerRef}
         className="relative overflow-hidden text-white"
-        style={{ marginTop: -2, background: "#000" }}
+        style={{ background: "#000", paddingTop: "2rem" }}
       >
         <DepthField containerRef={containerRef} count={58} />
         <CursorGlow containerRef={containerRef} color={accent} size={820} opacity={0.12} />

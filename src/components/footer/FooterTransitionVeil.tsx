@@ -19,7 +19,7 @@ export function FooterTransitionVeil({ accentColor = "80, 50, 180" }: FooterTran
       ref={ref}
       aria-hidden
       className="relative w-full overflow-hidden bg-transparent pointer-events-none"
-      style={{ height: 420, marginTop: -320, position: "relative", zIndex: 10 }}
+      style={{ height: 0, margin: 0, padding: 0, overflow: 'hidden' }}
     >
       <motion.div
         className="absolute inset-0"
