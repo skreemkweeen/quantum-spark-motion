@@ -55,7 +55,7 @@ const Vanta = () => (
         </div>
       </section>
 
-      <div className="pb-32">
+      <div className="relative">
         <div className="w-full">
           <img src={vantaHero} alt="Vanta Supply website hero" className="w-full object-cover" style={{ aspectRatio: '16/10' }} />
         </div>
@@ -72,6 +72,15 @@ const Vanta = () => (
         <div className="w-full">
           <img src={vantaScreens} alt="Vanta app screens" className="w-full object-cover" style={{ aspectRatio: '16/9' }} />
         </div>
+        {/* Seamless fade into footer */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0"
+          style={{
+            height: 280,
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.6) 40%, #000 100%)',
+            zIndex: 5,
+          }}
+        />
       </div>
     </main>
     <CinematicProjectFooter
