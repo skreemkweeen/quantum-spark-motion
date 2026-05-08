@@ -1,3 +1,3 @@
-import { CinematicFooter } from "@/components/CinematicFooter";
+import { StudioFooter } from "@/components/footer/StudioFooter";
 
-export const Footer = () => <CinematicFooter />;
+export const Footer = () => <StudioFooter />;
