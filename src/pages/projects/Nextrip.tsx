@@ -65,13 +65,6 @@ const TierLabel = ({ children, className = "" }: { children: React.ReactNode; cl
   <p className={`text-[9px] uppercase tracking-[0.4em] text-white/40 ${className}`}>{children}</p>
 );
 
-/* compatibility helpers used by old children blocks */
-const _GlassCardChildren = ({ children }: { children: React.ReactNode }) => (
-  <>
-    {children}
-  </>
-);
-
 const Meta = ({ label, value }: { label: string; value: string }) => (
   <div>
     <div className="text-[8px] uppercase tracking-[0.45em] text-white/35">{label}</div>
