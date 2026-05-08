@@ -7,6 +7,7 @@ import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
 import { Section, Bezel } from "@/components/nextrip/SectionFrame";
 import { NMark, NWordmark } from "@/components/nextrip/NMark";
 import { UserFlowDiagram } from "@/components/nextrip/UserFlowDiagram";
+import { Atmosphere, Device } from "@/components/nextrip/Atmosphere";
 
 import heroJet from "@/assets/nextrip/hero-jet-top.png";
 import phoneSearch from "@/assets/nextrip/phone-search.png";
@@ -16,11 +17,21 @@ import bali from "@/assets/nextrip/bali.jpg";
 import clouds from "@/assets/nextrip/clouds.png";
 import phonesRow from "@/assets/nextrip/phones-row.jpg";
 
-const Ghost = ({ children, className = "" }: { children: string; className?: string }) => (
+const Ghost = ({
+  children,
+  className = "",
+  align = "center",
+}: {
+  children: string;
+  className?: string;
+  align?: "left" | "center" | "right";
+}) => (
   <div
     aria-hidden
-    className={`pointer-events-none select-none absolute inset-x-0 text-center font-semibold tracking-tight text-white/[0.035] ${className}`}
-    style={{ fontSize: "clamp(5rem,18vw,18rem)", lineHeight: 0.85 }}
+    className={`pointer-events-none select-none absolute inset-x-0 font-medium tracking-[-0.04em] nx-chrome-text opacity-[0.06] ${
+      align === "left" ? "text-left pl-[6%]" : align === "right" ? "text-right pr-[6%]" : "text-center"
+    } ${className}`}
+    style={{ fontSize: "clamp(5rem,18vw,18rem)", lineHeight: 0.82 }}
   >
     {children}
   </div>
@@ -28,16 +39,43 @@ const Ghost = ({ children, className = "" }: { children: string; className?: str
 
 const GlassCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div
-    className={`relative rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_30px_60px_-30px_rgba(0,0,0,0.8)] transition-colors hover:border-white/20 ${className}`}
+    className={`group relative rounded-2xl border border-white/[0.06] bg-white/[0.015] p-7 backdrop-blur-xl transition-all duration-700 hover:border-white/[0.16] ${className}`}
+    style={{
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.02), 0 40px 80px -40px rgba(0,0,0,0.9), 0 0 120px -60px rgba(220,225,235,0.08)",
+    }}
   >
-    {children}
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255,255,255,0.06), transparent 60%)",
+      }}
+    />
+    <div className="relative">{children}</div>
   </div>
+);
+
+const Hairline = ({ className = "" }: { className?: string }) => (
+  <div className={`h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent ${className}`} />
+);
+
+const TierLabel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <p className={`text-[9px] uppercase tracking-[0.4em] text-white/40 ${className}`}>{children}</p>
+);
+
+/* compatibility helpers used by old children blocks */
+const _GlassCardChildren = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
+  </>
 );
 
 const Meta = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-[9px] uppercase tracking-[0.35em] text-white/40">{label}</div>
-    <div className="mt-1 text-xs text-white/85">{value}</div>
+    <div className="text-[8px] uppercase tracking-[0.45em] text-white/35">{label}</div>
+    <div className="mt-2 text-[11px] tracking-[0.05em] text-white/85">{value}</div>
   </div>
 );
 
