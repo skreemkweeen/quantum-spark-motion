@@ -579,20 +579,130 @@ const Nextrip = () => {
 
         {/* ===== 05 SPLASH ===== */}
         <Section index="04" rightMeta={<span>Splash Screens</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
+          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="wide" />
+
+            {/* layered cinematic backdrop */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 70% at 50% 45%, rgba(220,228,240,0.10), transparent 65%), radial-gradient(ellipse 35% 45% at 18% 75%, rgba(180,195,220,0.06), transparent 70%), radial-gradient(ellipse 35% 45% at 82% 25%, rgba(200,210,230,0.05), transparent 70%)",
+              }}
+            />
+            {/* deep stage vignette */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                boxShadow:
+                  "inset 0 200px 200px -120px rgba(0,0,0,0.95), inset 0 -200px 200px -120px rgba(0,0,0,0.95), inset 200px 0 200px -160px rgba(0,0,0,0.85), inset -200px 0 200px -160px rgba(0,0,0,0.85)",
+              }}
+            />
+            {/* caustic light streak */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-1/4 top-[20%] h-[60%] -rotate-[18deg] opacity-[0.06]"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)",
+                filter: "blur(80px)",
+              }}
+            />
+
             <Ghost align="left" className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
+
+            {/* editorial header */}
+            <div className="relative mb-20 flex items-end justify-between md:mb-28">
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="h-px w-10 bg-white/30" />
+                  <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Splash · 04</span>
+                </div>
+                <p className="mt-6 max-w-[28ch] text-[10px] uppercase leading-[1.9] tracking-[0.32em] text-white/45">
+                  Three frames · one identity<br />unfolding in motion.
+                </p>
+              </div>
+              <div className="hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
+                <div>Render · 1×</div>
+                <div className="mt-1 text-white/15">Studio Light · Cool</div>
+              </div>
+            </div>
+
+            {/* device stage */}
             <Parallax speed={0.92} className="relative">
-              <img
-                src={splashTrio}
-                alt="Splash screens"
-                loading="lazy"
-                decoding="async"
-                width={1600}
-                height={1100}
-                className="mx-auto h-auto w-full max-w-5xl drop-shadow-[0_80px_120px_rgba(0,0,0,0.95)]"
+              {/* concentric stage rings */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "min(900px, 90%)",
+                  height: "min(900px, 90%)",
+                  borderRadius: "9999px",
+                  border: "1px solid rgba(255,255,255,0.04)",
+                  boxShadow:
+                    "inset 0 0 160px rgba(255,255,255,0.04), 0 0 240px -60px rgba(220,228,240,0.10)",
+                }}
               />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "min(620px, 70%)",
+                  height: "min(620px, 70%)",
+                  borderRadius: "9999px",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                }}
+              />
+              {/* primary atmospheric halo */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "min(820px, 85%)",
+                  height: "min(520px, 60%)",
+                  background:
+                    "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(230,236,248,0.18), transparent 65%)",
+                  filter: "blur(60px)",
+                }}
+              />
+
+              <div className="relative">
+                <img
+                  src={splashTrio}
+                  alt="Splash screens"
+                  loading="lazy"
+                  decoding="async"
+                  width={1600}
+                  height={1100}
+                  className="relative mx-auto h-auto w-full max-w-5xl"
+                  style={{
+                    filter:
+                      "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 80px rgba(220,230,245,0.16))",
+                  }}
+                />
+                {/* floor pool grounding shadow */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute left-1/2 top-full -mt-10 h-[120px] w-[78%] -translate-x-1/2"
+                  style={{
+                    background:
+                      "radial-gradient(ellipse 50% 50% at 50% 0%, rgba(0,0,0,0.95), transparent 70%)",
+                    filter: "blur(28px)",
+                  }}
+                />
+              </div>
             </Parallax>
+
+            {/* editorial footer rail */}
+            <div className="relative mt-24 flex items-center justify-between text-[8px] uppercase tracking-[0.45em] text-white/30 md:mt-32">
+              <span>Frame 01 · Welcome</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
+              <span>Frame 02 · Brand</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
+              <span>Frame 03 · Enter</span>
+            </div>
           </div>
         </Section>
 
