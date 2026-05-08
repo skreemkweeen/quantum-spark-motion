@@ -3,7 +3,6 @@ import { Projects } from "@/components/sections/Projects";
 import { Devices } from "@/components/sections/Devices";
 import { Footer } from "@/components/sections/Footer";
 import { SectionDivider } from "@/components/SectionDivider";
-import { Component as StudioHero } from "@/components/ui/studio-hero";
 import { ChromeWavefield } from "@/components/ui/chrome-wavefield";
 
 const Index = () => (
@@ -11,7 +10,6 @@ const Index = () => (
     <Nav />
     <main>
       <ChromeWavefield />
-      <StudioHero />
       <Projects />
       <SectionDivider variant="deep" />
       <Devices />
