@@ -248,51 +248,108 @@ const Nextrip = () => {
 
         {/* ===== 02 INTRO ===== */}
         <Section index="01" rightMeta={<span>Overview</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="editorial" />
-            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
-              {/* Left: 2-col editorial copy */}
-              <div className="lg:col-span-7 lg:pr-12">
-                <div className="grid gap-12 sm:grid-cols-2">
-                  <Reveal>
-                    <div>
-                      <TierLabel className="mb-6">Application</TierLabel>
-                      <NWordmark />
-                      <p className="mt-8 text-[11px] leading-[1.7] tracking-[0.05em] text-white/55" style={{ maxWidth: "32ch" }}>
-                        An intelligent travel platform composed for the modern traveler.
-                      </p>
-                    </div>
-                  </Reveal>
-                  <Reveal delay={120}>
-                    <div>
-                      <TierLabel className="mb-6">About</TierLabel>
-                      <p className="text-[17px] font-light leading-[1.6] tracking-[-0.005em] text-white/85" style={{ maxWidth: "28ch" }}>
-                        NexTrip redefines the way people discover, plan, and{" "}
-                        <span className="italic text-white" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>experience</span>{" "}
-                        the world.
-                      </p>
-                      <Hairline className="mt-8" />
-                      <p className="mt-6 text-[11px] leading-[1.7] text-white/45" style={{ maxWidth: "36ch" }}>
-                        We combine cutting-edge technology with human insight to create journeys that matter.
-                      </p>
-                    </div>
-                  </Reveal>
-                </div>
+            {/* layered gradient depth */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 50% 60% at 78% 50%, rgba(220,228,240,0.07), transparent 70%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(180,195,220,0.04), transparent 65%)",
+              }}
+            />
+            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-40" />
+
+            {/* asymmetric editorial grid: 5 / 1 / 6 */}
+            <div className="relative grid gap-x-8 gap-y-16 lg:grid-cols-12">
+              {/* Left column — editorial copy stack */}
+              <div className="relative lg:col-span-5 lg:pt-8">
+                <Reveal>
+                  <div className="flex items-center gap-4">
+                    <span className="h-px w-10 bg-white/30" />
+                    <TierLabel>Application · 01</TierLabel>
+                  </div>
+                  <div className="mt-8">
+                    <NWordmark />
+                  </div>
+                  <p className="mt-10 text-[10px] uppercase leading-[1.9] tracking-[0.32em] text-white/45" style={{ maxWidth: "30ch" }}>
+                    An intelligent travel platform<br />composed for the modern traveler.
+                  </p>
+                </Reveal>
+
                 <Reveal delay={220}>
-                  <div className="mt-16 max-w-md">
-                    <TierLabel className="mb-6">Main Task</TierLabel>
-                    <p className="text-[13px] leading-[1.75] text-white/65" style={{ maxWidth: "44ch" }}>
-                      Millions of travelers face scattered options and complex planning. NexTrip brings
-                      everything together in one seamless experience — saving time, offering clarity, and
-                      unlocking extraordinary journeys.
+                  <div className="mt-24 lg:mt-32">
+                    <TierLabel className="mb-8">Main Task</TierLabel>
+                    <p
+                      className="font-light text-white/75"
+                      style={{
+                        maxWidth: "40ch",
+                        fontSize: "13px",
+                        lineHeight: 1.85,
+                        letterSpacing: "0.01em",
+                      }}
+                    >
+                      Millions of travelers face scattered options and complex planning.
+                      NexTrip brings everything together in one seamless experience — saving
+                      time, offering clarity, and unlocking extraordinary journeys.
                     </p>
+                    <Hairline className="mt-10 max-w-[14rem]" />
                   </div>
                 </Reveal>
               </div>
 
-              {/* Right: floating sculptural phone */}
+              {/* Center column — vertical seam + ambient backdrop for the device */}
+              <div className="relative hidden lg:col-span-2 lg:block">
+                <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/[0.08] to-transparent" />
+                <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rotate-90 whitespace-nowrap text-[8px] uppercase tracking-[0.6em] text-white/25 xl:block">
+                  Composed · Considered · Calm
+                </div>
+              </div>
+
+              {/* Right column — pull-quote + floating device */}
               <div className="relative lg:col-span-5">
-                <Parallax speed={0.92} className="flex justify-center lg:justify-end">
+                <Reveal delay={120}>
+                  <div className="lg:max-w-[24ch] lg:translate-x-[-12%]">
+                    <TierLabel className="mb-6">About</TierLabel>
+                    <p
+                      className="font-light tracking-[-0.015em] text-white"
+                      style={{
+                        fontSize: "clamp(1.5rem, 2.4vw, 2.1rem)",
+                        lineHeight: 1.18,
+                      }}
+                    >
+                      NexTrip redefines the way people discover, plan, and{" "}
+                      <span
+                        className="italic"
+                        style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                      >
+                        experience
+                      </span>{" "}
+                      the world.
+                    </p>
+                    <Hairline className="mt-8 max-w-[6rem]" />
+                    <p className="mt-6 text-[10px] uppercase leading-[1.9] tracking-[0.3em] text-white/40" style={{ maxWidth: "32ch" }}>
+                      Cutting-edge technology &nbsp;·&nbsp; human insight &nbsp;·&nbsp; journeys that matter.
+                    </p>
+                  </div>
+                </Reveal>
+
+                {/* sculptural phone — overlaps onto center column for tension */}
+                <Parallax speed={0.92} className="relative mt-20 flex justify-center lg:mt-28 lg:justify-end lg:translate-x-[8%]">
+                  {/* aircraft-style ambient halo */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      width: "min(520px, 70%)",
+                      height: "min(520px, 70%)",
+                      borderRadius: "9999px",
+                      background:
+                        "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(230,235,245,0.12), transparent 65%)",
+                      filter: "blur(40px)",
+                    }}
+                  />
                   <Device className="animate-float-y">
                     <img
                       src={phoneSearch}
@@ -301,9 +358,19 @@ const Nextrip = () => {
                       decoding="async"
                       width={420}
                       height={840}
-                      className="h-auto w-[clamp(220px,26vw,360px)] drop-shadow-[0_70px_100px_rgba(0,0,0,0.95)]"
+                      className="relative h-auto w-[clamp(220px,28vw,380px)]"
+                      style={{
+                        filter:
+                          "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 60px rgba(220,230,245,0.14))",
+                      }}
                     />
                   </Device>
+
+                  {/* tiny coordinate marker beside the device */}
+                  <div className="absolute -left-6 bottom-6 hidden text-[8px] uppercase tracking-[0.45em] text-white/25 lg:block">
+                    <div>Iframe · 01</div>
+                    <div className="mt-1 text-white/15">Search</div>
+                  </div>
                 </Parallax>
               </div>
             </div>
