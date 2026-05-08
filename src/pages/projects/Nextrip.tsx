@@ -100,8 +100,39 @@ const Nextrip = () => {
 
       <main className="relative z-10 pt-24">
         {/* ===== 01 HERO ===== */}
-        <section className="relative overflow-hidden px-6 pb-40 pt-16 md:pb-48 lg:pb-56">
+        <section className="relative overflow-hidden px-6 pb-48 pt-16 md:pb-56 lg:pb-72">
           <Atmosphere variant="hero" />
+          {/* deeper cinematic light bloom behind jet */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 38% 55% at 47% 58%, rgba(220,228,240,0.10), transparent 70%)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2"
+            style={{
+              width: "70vw",
+              height: "70vw",
+              maxWidth: 1100,
+              maxHeight: 1100,
+              background:
+                "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 60%)",
+              filter: "blur(40px)",
+            }}
+          />
+          {/* faint horizon line */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-[62%] h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)",
+            }}
+          />
           <div className="relative mx-auto max-w-7xl">
             <Reveal>
               <div className="flex flex-wrap items-start justify-between gap-6 text-[9px] uppercase tracking-[0.4em] text-white/40">
@@ -115,36 +146,97 @@ const Nextrip = () => {
               </div>
             </Reveal>
 
-            <div className="relative mt-20 flex min-h-[72vh] items-center justify-center md:mt-28">
-              <Ghost align="right" className="top-1/2 -translate-y-1/2">nextrip</Ghost>
+            <div className="relative mt-28 flex min-h-[82vh] items-center justify-center md:mt-36">
+              <Ghost align="center" className="top-1/2 -translate-y-1/2">nextrip</Ghost>
               {/* off-axis vertical guide */}
-              <div className="pointer-events-none absolute left-[42%] top-0 h-full w-px bg-gradient-to-b from-transparent via-white/[0.07] to-transparent" />
-              <Parallax speed={1.05} className="relative z-10 -translate-x-[6%]">
+              <div className="pointer-events-none absolute left-[42%] top-[8%] h-[84%] w-px bg-gradient-to-b from-transparent via-white/[0.06] to-transparent" />
+
+              {/* concentric atmospheric rings */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "min(720px, 80vw)",
+                  height: "min(720px, 80vw)",
+                  borderRadius: "9999px",
+                  border: "1px solid rgba(255,255,255,0.04)",
+                  boxShadow:
+                    "inset 0 0 120px rgba(255,255,255,0.04), 0 0 200px -40px rgba(220,225,235,0.08)",
+                }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+                style={{
+                  width: "min(440px, 50vw)",
+                  height: "min(440px, 50vw)",
+                  borderRadius: "9999px",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                }}
+              />
+
+              <Parallax speed={1.05} className="relative z-10 -translate-x-[4%]">
                 <Device className="animate-float-y">
+                  {/* aircraft glow halo */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-[-30%]"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 45% 55% at 50% 50%, rgba(235,240,250,0.16), transparent 65%)",
+                      filter: "blur(50px)",
+                    }}
+                  />
                   <img
                     src={heroJet}
                     alt="NexTrip"
                     width={620}
                     height={620}
-                    className="mx-auto h-auto w-[clamp(280px,40vw,580px)] drop-shadow-[0_60px_100px_rgba(0,0,0,0.9)]"
+                    className="relative mx-auto h-auto w-[clamp(280px,42vw,620px)]"
+                    style={{
+                      filter:
+                        "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(220,230,245,0.18))",
+                    }}
+                  />
+                  {/* under-aircraft floor pool */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute left-1/2 top-full mt-[-60px] h-[120px] w-[85%] -translate-x-1/2"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 50% 50% at 50% 0%, rgba(0,0,0,0.95), transparent 70%)",
+                      filter: "blur(24px)",
+                    }}
                   />
                 </Device>
               </Parallax>
-              {/* N badge — repositioned for asymmetric balance */}
-              <div className="absolute right-[14%] top-[58%] hidden md:block">
+
+              {/* N badge — asymmetric counterweight */}
+              <div className="absolute right-[10%] top-[62%] hidden md:block">
                 <div
                   className="grid h-14 w-14 place-items-center rounded-xl border border-white/[0.08] backdrop-blur-md"
                   style={{
-                    background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))",
-                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01))",
+                    boxShadow:
+                      "inset 0 1px 0 rgba(255,255,255,0.10), 0 20px 40px -20px rgba(0,0,0,0.8), 0 0 40px -10px rgba(220,225,235,0.10)",
                   }}
                 >
                   <NMark size={28} />
                 </div>
               </div>
+
+              {/* corner editorial markers */}
+              <div className="absolute left-0 top-[12%] hidden text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
+                <div>N 40°42′</div>
+                <div className="mt-1 text-white/15">Altitude · 38,000 ft</div>
+              </div>
+              <div className="absolute bottom-[6%] right-0 hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
+                <div>Mach 0.85</div>
+                <div className="mt-1 text-white/15">Heading · 270°W</div>
+              </div>
             </div>
 
-            <div className="mt-20 flex items-center justify-between text-[9px] uppercase tracking-[0.4em] text-white/30">
+            <div className="mt-24 flex items-center justify-between text-[9px] uppercase tracking-[0.4em] text-white/30">
               <span>40°42′46″N — 74°00′21″W</span>
               <Hairline className="mx-8 hidden flex-1 md:block" />
               <span>Est. 2024</span>
