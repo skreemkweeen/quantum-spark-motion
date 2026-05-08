@@ -80,7 +80,7 @@ export const TextHoverEffect = ({
         {text}
       </text>
 
-      {/* Animated dash draw */}
+      {/* Animated dash draw — continuous loop */}
       <motion.text
         x="50%"
         y="50%"
@@ -90,7 +90,12 @@ export const TextHoverEffect = ({
         className="fill-transparent stroke-white font-[helvetica] text-7xl font-bold"
         initial={{ strokeDashoffset: 1000, strokeDasharray: 1000 }}
         animate={{ strokeDashoffset: 0, strokeDasharray: 1000 }}
-        transition={{ duration: 4, ease: "easeInOut" }}
+        transition={{
+          duration: 4,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "loop",
+        }}
       >
         {text}
       </motion.text>
