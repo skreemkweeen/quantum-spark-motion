@@ -8,6 +8,7 @@ import serviceBrandIdentity from "@/assets/service-brand-identity.png";
 import serviceMarketing from "@/assets/service-marketing.png";
 import serviceWebDesign from "@/assets/service-web-design.png";
 import serviceStrategy from "@/assets/service-strategy.png";
+import serviceGraphicDesign from "@/assets/service-graphic-design.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -19,8 +20,9 @@ const serviceData: GalleryItem[] = [
     common: "Graphic Design",
     binomial: "VISUAL · EDITORIAL · PRINT",
     photo: {
-      url: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&auto=format&fit=crop&q=80",
+      url: serviceGraphicDesign,
       text: "abstract graphic design",
+      pos: "center",
       by: "02",
     },
   },
