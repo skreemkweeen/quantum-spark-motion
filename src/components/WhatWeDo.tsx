@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
+import serviceUxUi from "@/assets/service-uxui.png";
 
 const serviceData: GalleryItem[] = [
-  { common: "UX / UI Design", binomial: "RESEARCH · PROTOTYPE · SHIP", photo: { url: "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=900&auto=format&fit=crop&q=80", text: "UI design interface", pos: "center", by: "01" } },
+  { common: "UX / UI Design", binomial: "RESEARCH · PROTOTYPE · SHIP", photo: { url: serviceUxUi, text: "UI design interface", pos: "center", by: "01" } },
   { common: "Graphic Design", binomial: "VISUAL · EDITORIAL · PRINT", photo: { url: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&auto=format&fit=crop&q=80", text: "abstract graphic design", by: "02" } },
   { common: "Art Direction", binomial: "CONCEPT · VISION · EXECUTE", photo: { url: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&auto=format&fit=crop&q=80", text: "art direction creative", by: "03" } },
   { common: "Brand Identity", binomial: "MARK · SYSTEM · LANGUAGE", photo: { url: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=900&auto=format&fit=crop&q=80", text: "brand identity colours", by: "04" } },
