@@ -427,57 +427,147 @@ const Nextrip = () => {
 
         {/* ===== 04 IDENTITY ===== */}
         <Section index="03" rightMeta={<span>Identity</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="editorial" />
-            <div className="relative grid gap-6 md:grid-cols-3 md:gap-8">
+            {/* cinematic ambient lighting layers */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 45% 60% at 18% 30%, rgba(220,228,240,0.08), transparent 65%), radial-gradient(ellipse 50% 60% at 82% 70%, rgba(180,195,220,0.06), transparent 70%)",
+              }}
+            />
+            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-30" />
+
+            <div className="relative grid gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
+              {/* Card 1 — Identity */}
               <GlassCard className="aspect-[3/4] flex-col justify-between flex">
-                <div className="text-[9px] uppercase tracking-[0.3em] text-white/40">Identity</div>
-                <div className="my-auto flex justify-center">
-                  <img src={heroJet} alt="" width={300} height={300} loading="lazy" className="h-auto w-3/4 opacity-90" />
+                <div className="flex items-center gap-3">
+                  <span className="h-px w-6 bg-white/30" />
+                  <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Identity · 01</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <NWordmark />
-                  <span className="text-[9px] tracking-[0.3em] text-white/30">SHORT POINTS</span>
+                <div className="relative my-auto flex justify-center">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        "radial-gradient(ellipse 55% 55% at 50% 50%, rgba(230,235,245,0.10), transparent 65%)",
+                      filter: "blur(30px)",
+                    }}
+                  />
+                  <img
+                    src={heroJet}
+                    alt=""
+                    width={300}
+                    height={300}
+                    loading="lazy"
+                    className="relative h-auto w-3/4"
+                    style={{
+                      filter:
+                        "drop-shadow(0 30px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 30px rgba(220,230,245,0.12))",
+                    }}
+                  />
                 </div>
-              </GlassCard>
-              <GlassCard className="aspect-[3/4]">
-                <div className="flex h-full flex-col items-center justify-center">
-                  <NMark size={200} className="drop-shadow-[0_30px_40px_rgba(0,0,0,0.6)]" />
-                  <div className="mt-8 flex items-center gap-3 text-white/30">
-                    <span className="h-2 w-2 rounded-full bg-white/40" />
-                    <span>→</span>
-                    <NMark size={16} />
-                    <span>→</span>
-                    <NMark size={20} />
-                    <span>→</span>
-                    <NMark size={24} />
+                <div>
+                  <Hairline className="mb-5 max-w-[5rem]" />
+                  <div className="flex items-end justify-between">
+                    <NWordmark />
+                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/30">Short Points</span>
                   </div>
                 </div>
               </GlassCard>
-              <div className="flex aspect-[3/4] flex-col gap-6">
+
+              {/* Card 2 — Mark */}
+              <GlassCard className="aspect-[3/4]">
+                <div className="flex h-full flex-col">
+                  <div className="flex items-center gap-3">
+                    <span className="h-px w-6 bg-white/30" />
+                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Mark · 02</span>
+                  </div>
+                  <div className="relative my-auto flex flex-col items-center justify-center">
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                      style={{
+                        background:
+                          "radial-gradient(circle at 50% 50%, rgba(235,240,250,0.14), transparent 60%)",
+                        filter: "blur(28px)",
+                      }}
+                    />
+                    <NMark size={200} className="relative drop-shadow-[0_40px_60px_rgba(0,0,0,0.8)]" />
+                  </div>
+                  <div>
+                    <Hairline className="mb-5 max-w-[5rem]" />
+                    <div className="flex items-center justify-between">
+                      <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Scale</span>
+                      <div className="flex items-center gap-3 text-white/30">
+                        <NMark size={12} />
+                        <span className="text-[8px]">·</span>
+                        <NMark size={16} />
+                        <span className="text-[8px]">·</span>
+                        <NMark size={20} />
+                        <span className="text-[8px]">·</span>
+                        <NMark size={24} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+
+              {/* Right column — Palette + Typography */}
+              <div className="flex aspect-[3/4] flex-col gap-8 md:gap-10">
                 <GlassCard className="flex-1">
-                  <p className="text-[9px] uppercase tracking-[0.3em] text-white/40">Palette</p>
-                  <div className="mt-6 flex h-16 gap-2">
+                  <div className="flex items-center gap-3">
+                    <span className="h-px w-6 bg-white/30" />
+                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Palette · 03</span>
+                  </div>
+                  <div className="mt-7 flex h-14 gap-1.5 overflow-hidden rounded-md">
                     {["#0D0D11", "#2A2A34", "#8A8A92", "#CDCDD3", "#F5F5F7"].map((c) => (
-                      <div key={c} className="flex-1 rounded-sm" style={{ background: c }} />
+                      <div
+                        key={c}
+                        className="flex-1"
+                        style={{
+                          background: c,
+                          boxShadow:
+                            "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)",
+                        }}
+                      />
                     ))}
                   </div>
-                  <div className="mt-4 flex justify-between text-[8px] uppercase tracking-[0.25em] text-white/30">
+                  <div className="mt-4 flex justify-between text-[8px] uppercase tracking-[0.3em] text-white/30">
                     <span>0D0D11</span><span>2A2A34</span><span>8A8A92</span><span>CDCDD3</span><span>F5F5F7</span>
                   </div>
-                  <div className="mt-6 text-[10px] tracking-[0.2em] text-white/50">WCAG Test: <span className="text-white/85 underline">Pass</span></div>
+                  <Hairline className="mt-6 max-w-[5rem]" />
+                  <div className="mt-5 text-[9px] uppercase tracking-[0.35em] text-white/45">
+                    WCAG <span className="ml-2 text-white/85">Pass</span>
+                  </div>
                 </GlassCard>
+
                 <GlassCard className="flex-1">
-                  <div className="flex items-start gap-6">
-                    <div className="text-6xl font-light leading-none text-white/95" style={{ fontFamily: "Georgia, serif" }}>Aa</div>
-                    <div>
-                      <p className="text-[9px] uppercase tracking-[0.3em] text-white/40">Typography</p>
-                      <div className="mt-1 text-base">Satoshi</div>
-                      <ul className="mt-3 space-y-1 text-xs text-white/65">
-                        <li>◦ Regular</li>
-                        <li>◦ Medium</li>
-                        <li>◦ SemiBold</li>
-                        <li>◦ Bold</li>
+                  <div className="flex items-center gap-3">
+                    <span className="h-px w-6 bg-white/30" />
+                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Typography · 04</span>
+                  </div>
+                  <div className="mt-6 flex items-end gap-7">
+                    <div
+                      className="font-light leading-none text-white/95"
+                      style={{
+                        fontFamily: "Georgia, serif",
+                        fontSize: "clamp(3.5rem, 6vw, 5rem)",
+                        textShadow: "0 0 40px rgba(220,230,245,0.15)",
+                      }}
+                    >
+                      Aa
+                    </div>
+                    <div className="pb-2">
+                      <div className="text-[15px] tracking-[-0.01em] text-white">Satoshi</div>
+                      <ul className="mt-3 space-y-1.5 text-[10px] uppercase tracking-[0.3em] text-white/55">
+                        <li>Regular</li>
+                        <li>Medium</li>
+                        <li>SemiBold</li>
+                        <li>Bold</li>
                       </ul>
                     </div>
                   </div>
