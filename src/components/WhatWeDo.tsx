@@ -5,6 +5,7 @@ import serviceUxUi from "@/assets/service-uxui.png";
 import serviceArtDirection from "@/assets/service-art-direction.png";
 import serviceMotion from "@/assets/service-motion.png";
 import serviceBrandIdentity from "@/assets/service-brand-identity.png";
+import serviceMarketing from "@/assets/service-marketing.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -59,8 +60,9 @@ const serviceData: GalleryItem[] = [
     common: "Marketing",
     binomial: "REACH · CONVERT · GROW",
     photo: {
-      url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80",
+      url: serviceMarketing,
       text: "digital marketing analytics",
+      pos: "center",
       by: "07",
     },
   },
