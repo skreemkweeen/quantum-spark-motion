@@ -7,6 +7,7 @@ import serviceMotion from "@/assets/service-motion.png";
 import serviceBrandIdentity from "@/assets/service-brand-identity.png";
 import serviceMarketing from "@/assets/service-marketing.png";
 import serviceWebDesign from "@/assets/service-web-design.png";
+import serviceStrategy from "@/assets/service-strategy.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -72,8 +73,9 @@ const serviceData: GalleryItem[] = [
     common: "Strategy",
     binomial: "DEFINE · ALIGN · EXECUTE",
     photo: {
-      url: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&auto=format&fit=crop&q=80",
+      url: serviceStrategy,
       text: "strategy planning",
+      pos: "center",
       by: "08",
     },
   },
