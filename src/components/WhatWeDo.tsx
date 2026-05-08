@@ -4,6 +4,7 @@ import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import serviceUxUi from "@/assets/service-uxui.png";
 import serviceArtDirection from "@/assets/service-art-direction.png";
 import serviceMotion from "@/assets/service-motion.png";
+import serviceBrandIdentity from "@/assets/service-brand-identity.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -34,8 +35,9 @@ const serviceData: GalleryItem[] = [
     common: "Brand Identity",
     binomial: "MARK · SYSTEM · LANGUAGE",
     photo: {
-      url: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=900&auto=format&fit=crop&q=80",
+      url: serviceBrandIdentity,
       text: "brand identity colours",
+      pos: "center",
       by: "04",
     },
   },
