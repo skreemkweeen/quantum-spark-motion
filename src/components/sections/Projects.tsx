@@ -46,8 +46,37 @@ export const PROJECTS = [
 ];
 
 export const Projects = () => (
-  <section id="work" className="relative px-6 py-32">
-    <div className="mx-auto max-w-7xl">
+  <section
+    id="work"
+    className="relative px-6 pb-32 pt-20"
+    style={{ background: "#050508" }}
+  >
+    {/* Atmospheric continuity: subtle grid + top fade so the section emerges from the hero */}
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
+        backgroundSize: "132px 132px",
+        maskImage:
+          "radial-gradient(ellipse 90% 70% at 50% 30%, #000 40%, transparent 95%)",
+      }}
+    />
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-x-0 top-0 h-40"
+      style={{ background: "linear-gradient(to bottom, #050508, transparent)" }}
+    />
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(140,80,255,0.04), transparent 70%)",
+      }}
+    />
+    <div className="relative mx-auto max-w-7xl">
       <Reveal>
         <div className="mb-16 flex items-end justify-between">
           <h2 className="text-xs uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))]">
