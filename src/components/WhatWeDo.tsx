@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import serviceUxUi from "@/assets/service-uxui.png";
+import serviceArtDirection from "@/assets/service-art-direction.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -22,8 +23,9 @@ const serviceData: GalleryItem[] = [
     common: "Art Direction",
     binomial: "CONCEPT · VISION · EXECUTE",
     photo: {
-      url: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&auto=format&fit=crop&q=80",
+      url: serviceArtDirection,
       text: "art direction creative",
+      pos: "center",
       by: "03",
     },
   },
