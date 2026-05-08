@@ -491,23 +491,25 @@ const Nextrip = () => {
 
         {/* ===== 09 PROFILE / PERSONAS ===== */}
         <Section index="08" rightMeta={<span>Profile</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="device" />
+            <div className="relative grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center md:gap-16">
               <Reveal>
                 <div>
-                  <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/40">About</p>
-                  <p className="text-base leading-relaxed text-white/80">
+                  <TierLabel className="mb-6">About</TierLabel>
+                  <p className="text-[14px] font-light leading-[1.7] text-white/85" style={{ maxWidth: "32ch" }}>
                     The personal profile is equipped with additional settings, flight statistics, as
-                    well as reminders about the upcoming flight
+                    well as reminders about the upcoming flight.
                   </p>
-                  <div className="mt-8 space-y-3 text-xs">
+                  <Hairline className="my-8 max-w-[80px]" />
+                  <div className="space-y-3 text-[10px] tracking-[0.25em]">
                     {[
                       ["BEGINNER", "rgba(255,255,255,0.55)"],
                       ["TRAVELER", "rgba(140,160,255,0.85)"],
                       ["BUSINESSMAN", "rgba(180,140,255,0.85)"],
                     ].map(([label, color]) => (
-                      <div key={label} className="flex items-center gap-2 text-white/70">
-                        <span className="h-2 w-2 rounded-full" style={{ background: color }} />
+                      <div key={label} className="flex items-center gap-3 text-white/65">
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
                         {label}
                       </div>
                     ))}
@@ -516,32 +518,32 @@ const Nextrip = () => {
               </Reveal>
               <Reveal delay={120}>
                 <GlassCard className="mx-auto w-full max-w-xs">
-                  <div className="flex items-center justify-between text-[10px] text-white/40">
+                  <div className="flex items-center justify-between text-[10px] text-white/35">
                     <span>≡</span>
                     <NWordmark />
                     <span>✎</span>
                   </div>
                   <div className="mt-6 text-center">
-                    <div className="mx-auto h-16 w-16 rounded-full bg-white/10" />
-                    <div className="mt-3 text-sm">Daniel Jackson</div>
-                    <div className="mt-1 inline-block rounded border border-indigo-400/40 px-2 py-0.5 text-[9px] tracking-[0.25em] text-indigo-200">TRAVELER</div>
+                    <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-white/25 to-white/5 ring-1 ring-white/10" />
+                    <div className="mt-3 text-[13px] tracking-[0.02em]">Daniel Jackson</div>
+                    <div className="mt-2 inline-block rounded border border-white/15 px-2 py-0.5 text-[9px] tracking-[0.3em] text-white/70">TRAVELER</div>
                   </div>
                   <div className="mt-6 grid grid-cols-3 gap-2 text-center text-white/80">
                     {[["Flights", "5"], ["In air", "32h"], ["Flow", "2k km"]].map(([l, v]) => (
-                      <div key={l} className="rounded-md border border-white/10 bg-white/[0.03] py-3">
-                        <div className="text-[9px] uppercase tracking-[0.25em] text-white/40">{l}</div>
-                        <div className="mt-1 text-sm">{v}</div>
+                      <div key={l} className="rounded-md border border-white/[0.07] bg-white/[0.02] py-3 backdrop-blur-sm">
+                        <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">{l}</div>
+                        <div className="mt-1.5 text-[13px]">{v}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-6 rounded-md border border-white/10 bg-white/[0.03] p-3 text-[10px] text-white/60">
-                    <div className="text-[9px] uppercase tracking-[0.25em] text-white/40">Upcoming flight</div>
-                    <div className="mt-2 flex justify-between"><span>24 May</span><span>12:30 — 18:00</span><span>UA114</span></div>
+                  <div className="mt-6 rounded-md border border-white/[0.07] bg-white/[0.02] p-3 text-[10px] text-white/60 backdrop-blur-sm">
+                    <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">Upcoming flight</div>
+                    <div className="mt-2.5 flex justify-between text-[10px] tracking-[0.05em]"><span>24 May</span><span>12:30 — 18:00</span><span className="text-white/85">UA114</span></div>
                   </div>
                 </GlassCard>
               </Reveal>
               <Reveal delay={200}>
-                <p className="text-xs leading-relaxed text-white/55 md:max-w-xs">
+                <p className="text-[12px] leading-[1.75] text-white/55" style={{ maxWidth: "34ch" }}>
                   It is very interesting to know how many hours and distances you have covered over the
                   entire time. You can brag about this to your friends, or compete with them.
                 </p>
@@ -554,17 +556,26 @@ const Nextrip = () => {
         <section className="relative overflow-hidden">
           <Bezel />
           <div className="relative">
+            <Atmosphere variant="wide" />
             <Parallax speed={0.85}>
               <img
                 src={phonesRow}
                 alt="NexTrip product showcase"
                 loading="lazy"
+                decoding="async"
                 width={1920}
                 height={1080}
                 className="h-auto w-full"
               />
             </Parallax>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508]/80 via-transparent to-[#050508]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508]" />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 50% at 50% 50%, transparent 30%, rgba(5,5,8,0.7) 100%)",
+              }}
+            />
           </div>
         </section>
       </main>
