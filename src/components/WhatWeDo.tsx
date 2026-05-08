@@ -6,6 +6,7 @@ import serviceArtDirection from "@/assets/service-art-direction.png";
 import serviceMotion from "@/assets/service-motion.png";
 import serviceBrandIdentity from "@/assets/service-brand-identity.png";
 import serviceMarketing from "@/assets/service-marketing.png";
+import serviceWebDesign from "@/assets/service-web-design.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -46,8 +47,9 @@ const serviceData: GalleryItem[] = [
     common: "Web Design",
     binomial: "LAYOUT · MOTION · CODE",
     photo: {
-      url: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&auto=format&fit=crop&q=80",
+      url: serviceWebDesign,
       text: "web design on screen",
+      pos: "center",
       by: "05",
     },
   },
