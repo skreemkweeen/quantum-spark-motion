@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import serviceUxUi from "@/assets/service-uxui.png";
 import serviceArtDirection from "@/assets/service-art-direction.png";
+import serviceMotion from "@/assets/service-motion.png";
 
 const serviceData: GalleryItem[] = [
   {
@@ -50,7 +51,7 @@ const serviceData: GalleryItem[] = [
   {
     common: "Motion Design",
     binomial: "ANIMATE · SEQUENCE · FEEL",
-    photo: { url: "https://ibb.co/C5VjnD7V?w=900&auto=format&fit=crop&q=80", text: "motion design blur", by: "06" },
+    photo: { url: serviceMotion, text: "motion design workspace", pos: "center", by: "06" },
   },
   {
     common: "Marketing",
