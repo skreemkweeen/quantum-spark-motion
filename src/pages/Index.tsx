@@ -3,13 +3,13 @@ import { Projects } from "@/components/sections/Projects";
 import { Devices } from "@/components/sections/Devices";
 import { Footer } from "@/components/sections/Footer";
 import { SectionDivider } from "@/components/SectionDivider";
-import { ChromeWavefield } from "@/components/ui/chrome-wavefield";
+import { TheInfiniteGrid } from "@/components/ui/the-infinite-grid";
 
 const Index = () => (
   <div className="min-h-screen bg-background text-foreground">
     <Nav />
     <main>
-      <ChromeWavefield />
+      <TheInfiniteGrid />
       <Projects />
       <SectionDivider variant="deep" />
       <Devices />
