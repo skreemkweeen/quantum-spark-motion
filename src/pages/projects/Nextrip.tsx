@@ -7,6 +7,7 @@ import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
 import { Section, Bezel } from "@/components/nextrip/SectionFrame";
 import { NMark, NWordmark } from "@/components/nextrip/NMark";
 import { UserFlowDiagram } from "@/components/nextrip/UserFlowDiagram";
+import { Atmosphere, Device } from "@/components/nextrip/Atmosphere";
 
 import heroJet from "@/assets/nextrip/hero-jet-top.png";
 import phoneSearch from "@/assets/nextrip/phone-search.png";
@@ -16,11 +17,21 @@ import bali from "@/assets/nextrip/bali.jpg";
 import clouds from "@/assets/nextrip/clouds.png";
 import phonesRow from "@/assets/nextrip/phones-row.jpg";
 
-const Ghost = ({ children, className = "" }: { children: string; className?: string }) => (
+const Ghost = ({
+  children,
+  className = "",
+  align = "center",
+}: {
+  children: string;
+  className?: string;
+  align?: "left" | "center" | "right";
+}) => (
   <div
     aria-hidden
-    className={`pointer-events-none select-none absolute inset-x-0 text-center font-semibold tracking-tight text-white/[0.035] ${className}`}
-    style={{ fontSize: "clamp(5rem,18vw,18rem)", lineHeight: 0.85 }}
+    className={`pointer-events-none select-none absolute inset-x-0 font-medium tracking-[-0.04em] nx-chrome-text opacity-[0.06] ${
+      align === "left" ? "text-left pl-[6%]" : align === "right" ? "text-right pr-[6%]" : "text-center"
+    } ${className}`}
+    style={{ fontSize: "clamp(5rem,18vw,18rem)", lineHeight: 0.82 }}
   >
     {children}
   </div>
@@ -28,16 +39,36 @@ const Ghost = ({ children, className = "" }: { children: string; className?: str
 
 const GlassCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div
-    className={`relative rounded-2xl border border-white/[0.07] bg-white/[0.02] p-6 backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_30px_60px_-30px_rgba(0,0,0,0.8)] transition-colors hover:border-white/20 ${className}`}
+    className={`group relative rounded-2xl border border-white/[0.06] bg-white/[0.015] p-7 backdrop-blur-xl transition-all duration-700 hover:border-white/[0.16] ${className}`}
+    style={{
+      boxShadow:
+        "inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.02), 0 40px 80px -40px rgba(0,0,0,0.9), 0 0 120px -60px rgba(220,225,235,0.08)",
+    }}
   >
-    {children}
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
+      style={{
+        background:
+          "radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255,255,255,0.06), transparent 60%)",
+      }}
+    />
+    <div className="relative">{children}</div>
   </div>
+);
+
+const Hairline = ({ className = "" }: { className?: string }) => (
+  <div className={`h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent ${className}`} />
+);
+
+const TierLabel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <p className={`text-[9px] uppercase tracking-[0.4em] text-white/40 ${className}`}>{children}</p>
 );
 
 const Meta = ({ label, value }: { label: string; value: string }) => (
   <div>
-    <div className="text-[9px] uppercase tracking-[0.35em] text-white/40">{label}</div>
-    <div className="mt-1 text-xs text-white/85">{value}</div>
+    <div className="text-[8px] uppercase tracking-[0.45em] text-white/35">{label}</div>
+    <div className="mt-2 text-[11px] tracking-[0.05em] text-white/85">{value}</div>
   </div>
 );
 
@@ -69,46 +100,55 @@ const Nextrip = () => {
 
       <main className="relative z-10 pt-24">
         {/* ===== 01 HERO ===== */}
-        <section className="relative overflow-hidden px-6 pb-32 pt-12">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden px-6 pb-40 pt-16 md:pb-48 lg:pb-56">
+          <Atmosphere variant="hero" />
+          <div className="relative mx-auto max-w-7xl">
             <Reveal>
-              <div className="flex flex-wrap items-start justify-between gap-6 text-[10px] uppercase tracking-[0.35em] text-white/45">
-                <Link to="/#work" className="hover:text-white">← Work</Link>
-                <div className="flex items-center gap-12">
+              <div className="flex flex-wrap items-start justify-between gap-6 text-[9px] uppercase tracking-[0.4em] text-white/40">
+                <Link to="/#work" className="transition-colors hover:text-white/90">← Work</Link>
+                <div className="flex items-center gap-10 md:gap-14">
                   <Meta label="Name" value="NexTrip" />
                   <Meta label="Type" value="Travel Platform" />
                   <Meta label="Year" value="2024" />
-                  <span className="grid h-7 w-7 place-items-center rounded-full border border-white/10 text-white/50">©</span>
+                  <span className="grid h-7 w-7 place-items-center rounded-full border border-white/[0.08] text-white/40">©</span>
                 </div>
               </div>
             </Reveal>
 
-            <div className="relative mt-16 flex min-h-[70vh] items-center justify-center">
-              <Ghost className="top-1/2 -translate-y-1/2">nextrip</Ghost>
-              <Parallax speed={1.1} className="relative z-10">
-                <div className="animate-float-y">
+            <div className="relative mt-20 flex min-h-[72vh] items-center justify-center md:mt-28">
+              <Ghost align="right" className="top-1/2 -translate-y-1/2">nextrip</Ghost>
+              {/* off-axis vertical guide */}
+              <div className="pointer-events-none absolute left-[42%] top-0 h-full w-px bg-gradient-to-b from-transparent via-white/[0.07] to-transparent" />
+              <Parallax speed={1.05} className="relative z-10 -translate-x-[6%]">
+                <Device className="animate-float-y">
                   <img
                     src={heroJet}
                     alt="NexTrip"
                     width={620}
                     height={620}
-                    className="mx-auto h-auto w-[clamp(280px,42vw,620px)] drop-shadow-[0_50px_80px_rgba(0,0,0,0.8)]"
+                    className="mx-auto h-auto w-[clamp(280px,40vw,580px)] drop-shadow-[0_60px_100px_rgba(0,0,0,0.9)]"
                   />
-                </div>
+                </Device>
               </Parallax>
-              {/* vertical guide */}
-              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-              {/* N badge */}
-              <div className="absolute right-[20%] top-1/2 hidden translate-y-12 md:block">
-                <div className="grid h-14 w-14 place-items-center rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md">
+              {/* N badge — repositioned for asymmetric balance */}
+              <div className="absolute right-[14%] top-[58%] hidden md:block">
+                <div
+                  className="grid h-14 w-14 place-items-center rounded-xl border border-white/[0.08] backdrop-blur-md"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+                  }}
+                >
                   <NMark size={28} />
                 </div>
               </div>
             </div>
 
-            <div className="mt-16 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-white/35">
-              <span>40°42'46"N — 74°00'21"W</span>
+            <div className="mt-20 flex items-center justify-between text-[9px] uppercase tracking-[0.4em] text-white/30">
+              <span>40°42′46″N — 74°00′21″W</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
               <span>Est. 2024</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
               <span className="hidden md:inline">© NexTrip</span>
             </div>
           </div>
@@ -116,91 +156,109 @@ const Nextrip = () => {
 
         {/* ===== 02 INTRO ===== */}
         <Section index="01" rightMeta={<span>Overview</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="mb-20 grid gap-10 md:grid-cols-3">
-              <Reveal>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">Application</p>
-                  <NWordmark />
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
+              {/* Left: 2-col editorial copy */}
+              <div className="lg:col-span-7 lg:pr-12">
+                <div className="grid gap-12 sm:grid-cols-2">
+                  <Reveal>
+                    <div>
+                      <TierLabel className="mb-6">Application</TierLabel>
+                      <NWordmark />
+                      <p className="mt-8 text-[11px] leading-[1.7] tracking-[0.05em] text-white/55" style={{ maxWidth: "32ch" }}>
+                        An intelligent travel platform composed for the modern traveler.
+                      </p>
+                    </div>
+                  </Reveal>
+                  <Reveal delay={120}>
+                    <div>
+                      <TierLabel className="mb-6">About</TierLabel>
+                      <p className="text-[17px] font-light leading-[1.6] tracking-[-0.005em] text-white/85" style={{ maxWidth: "28ch" }}>
+                        NexTrip redefines the way people discover, plan, and{" "}
+                        <span className="italic text-white" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>experience</span>{" "}
+                        the world.
+                      </p>
+                      <Hairline className="mt-8" />
+                      <p className="mt-6 text-[11px] leading-[1.7] text-white/45" style={{ maxWidth: "36ch" }}>
+                        We combine cutting-edge technology with human insight to create journeys that matter.
+                      </p>
+                    </div>
+                  </Reveal>
                 </div>
-              </Reveal>
-              <Reveal delay={120}>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">About</p>
-                  <p className="text-lg leading-relaxed text-white/85">
-                    NexTrip is an intelligent travel platform that redefines the way people
-                    discover, plan, and <em className="italic text-white">experience</em> the world.
-                  </p>
-                  <p className="mt-6 text-xs leading-relaxed text-white/45">
-                    We combine cutting-edge technology with human insight to create journeys that matter.
-                  </p>
-                </div>
-              </Reveal>
-              <Reveal delay={200}>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">Main Task</p>
-                  <p className="text-sm leading-relaxed text-white/70">
-                    Millions of travelers face scattered options and complex planning. NexTrip brings
-                    everything together in one seamless experience — saving time, offering clarity, and
-                    unlocking extraordinary journeys.
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-
-            <Parallax speed={0.9} className="flex justify-center">
-              <div className="animate-float-y">
-                <img
-                  src={phoneSearch}
-                  alt="NexTrip search"
-                  loading="lazy"
-                  width={420}
-                  height={840}
-                  className="h-auto w-[clamp(220px,28vw,380px)] drop-shadow-[0_60px_80px_rgba(0,0,0,0.9)]"
-                />
+                <Reveal delay={220}>
+                  <div className="mt-16 max-w-md">
+                    <TierLabel className="mb-6">Main Task</TierLabel>
+                    <p className="text-[13px] leading-[1.75] text-white/65" style={{ maxWidth: "44ch" }}>
+                      Millions of travelers face scattered options and complex planning. NexTrip brings
+                      everything together in one seamless experience — saving time, offering clarity, and
+                      unlocking extraordinary journeys.
+                    </p>
+                  </div>
+                </Reveal>
               </div>
-            </Parallax>
+
+              {/* Right: floating sculptural phone */}
+              <div className="relative lg:col-span-5">
+                <Parallax speed={0.92} className="flex justify-center lg:justify-end">
+                  <Device className="animate-float-y">
+                    <img
+                      src={phoneSearch}
+                      alt="NexTrip search"
+                      loading="lazy"
+                      decoding="async"
+                      width={420}
+                      height={840}
+                      className="h-auto w-[clamp(220px,26vw,360px)] drop-shadow-[0_70px_100px_rgba(0,0,0,0.95)]"
+                    />
+                  </Device>
+                </Parallax>
+              </div>
+            </div>
           </div>
         </Section>
 
         {/* ===== 03 ARCHITECTURE ===== */}
         <Section index="02" rightMeta={<span>Application Structure</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-10 md:grid-cols-3">
-              <Reveal>
-                <div className="space-y-6">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-60" />
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
+              <Reveal className="lg:col-span-3">
+                <div className="space-y-10">
                   <div>
-                    <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/50">MVP</p>
-                    <ul className="space-y-2 text-sm text-white/80">
-                      <li>◦ Business flow</li>
-                      <li>◦ Traveler flow</li>
+                    <TierLabel className="mb-4">MVP</TierLabel>
+                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/75">
+                      <li>— Business flow</li>
+                      <li>— Traveler flow</li>
                     </ul>
                   </div>
+                  <Hairline />
                   <div>
-                    <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/50">Coming</p>
-                    <ul className="space-y-2 text-sm text-white/80">
-                      <li>◦ Tours</li>
-                      <li>◦ Hotel reservations</li>
-                      <li>◦ Car reservation</li>
-                      <li>◦ Concierge</li>
-                      <li>◦ Integrations</li>
+                    <TierLabel className="mb-4">Coming</TierLabel>
+                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/55">
+                      <li>— Tours</li>
+                      <li>— Hotel reservations</li>
+                      <li>— Car reservation</li>
+                      <li>— Concierge</li>
+                      <li>— Integrations</li>
                     </ul>
                   </div>
                 </div>
               </Reveal>
-              <Reveal delay={120}>
+              <Reveal delay={120} className="lg:col-span-6">
                 <UserFlowDiagram />
               </Reveal>
-              <Reveal delay={200}>
+              <Reveal delay={200} className="lg:col-span-3">
                 <div>
-                  <p className="text-base leading-relaxed text-white/80">
-                    Application structure — is an initial development phase of the application
-                    architecture creating process.
+                  <TierLabel className="mb-6">Architecture</TierLabel>
+                  <p className="text-[14px] font-light leading-[1.7] text-white/80" style={{ maxWidth: "30ch" }}>
+                    Application structure — the initial development phase of the architecture process.
                   </p>
-                  <p className="mt-6 text-xs leading-relaxed text-white/45">
-                    This step helps to create a logic of interaction and connection between the screens
-                    without the description for interface elements. It provides an understanding of the
-                    overall functionality for the application development team.
+                  <Hairline className="my-8" />
+                  <p className="text-[11px] leading-[1.75] text-white/45" style={{ maxWidth: "36ch" }}>
+                    A logic of interaction and connection between screens, providing the development team a clear
+                    map of overall functionality before any interface element is designed.
                   </p>
                 </div>
               </Reveal>
@@ -210,8 +268,9 @@ const Nextrip = () => {
 
         {/* ===== 04 IDENTITY ===== */}
         <Section index="03" rightMeta={<span>Identity</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-6 md:grid-cols-3">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-6 md:grid-cols-3 md:gap-8">
               <GlassCard className="aspect-[3/4] flex-col justify-between flex">
                 <div className="text-[9px] uppercase tracking-[0.3em] text-white/40">Identity</div>
                 <div className="my-auto flex justify-center">
@@ -271,16 +330,18 @@ const Nextrip = () => {
 
         {/* ===== 05 SPLASH ===== */}
         <Section index="04" rightMeta={<span>Splash Screens</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-24">
-            <Ghost className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
-            <Parallax speed={0.95} className="relative">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
+            <Atmosphere variant="wide" />
+            <Ghost align="left" className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
+            <Parallax speed={0.92} className="relative">
               <img
                 src={splashTrio}
                 alt="Splash screens"
                 loading="lazy"
+                decoding="async"
                 width={1600}
                 height={1100}
-                className="mx-auto h-auto w-full max-w-5xl"
+                className="mx-auto h-auto w-full max-w-5xl drop-shadow-[0_80px_120px_rgba(0,0,0,0.95)]"
               />
             </Parallax>
           </div>
@@ -288,14 +349,15 @@ const Nextrip = () => {
 
         {/* ===== 06 DESCRIPTION ===== */}
         <Section index="05" rightMeta={<span>Description</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-32">
+          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
+            <Atmosphere variant="wide" />
             <img
               src={clouds}
               alt=""
               loading="lazy"
               width={1920}
               height={800}
-              className="pointer-events-none absolute -left-10 top-10 h-auto w-1/2 opacity-70"
+              className="pointer-events-none absolute -left-10 top-10 h-auto w-1/2 opacity-50 mix-blend-screen"
             />
             <img
               src={clouds}
@@ -303,19 +365,23 @@ const Nextrip = () => {
               loading="lazy"
               width={1920}
               height={800}
-              className="pointer-events-none absolute -right-10 bottom-10 h-auto w-1/2 -scale-x-100 opacity-50"
+              className="pointer-events-none absolute -right-10 bottom-10 h-auto w-1/2 -scale-x-100 opacity-35 mix-blend-screen"
             />
             <Reveal>
               <div className="relative mx-auto max-w-3xl text-center">
-                <p className="mb-6 text-[10px] uppercase tracking-[0.4em] text-white/40">• • • Description</p>
-                <h3 className="text-[clamp(1.6rem,3.5vw,2.6rem)] font-semibold leading-tight tracking-tight">
+                <TierLabel className="mb-8">Description</TierLabel>
+                <h3
+                  className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
+                  style={{ fontSize: "clamp(1.7rem,3.6vw,2.8rem)" }}
+                >
                   Simplified and personalized experience provides the highest degree of comfort to users
                 </h3>
-                <p className="mx-auto mt-8 max-w-md text-xs leading-relaxed text-white/55">
+                <Hairline className="mx-auto mt-10 max-w-[120px]" />
+                <p className="mx-auto mt-8 max-w-md text-[12px] leading-[1.75] text-white/50">
                   We have done a lot of research on the leading applications in this industry, took into
                   account all their shortcomings and made the best solution.
                 </p>
-                <div className="mt-12 flex justify-center">
+                <div className="mt-14 flex justify-center">
                   <NWordmark />
                 </div>
               </div>
@@ -325,60 +391,97 @@ const Nextrip = () => {
 
         {/* ===== 07 USERFLOW STATEMENT + CAR ===== */}
         <Section index="06" rightMeta={<span>Userflow</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-24">
-            <Reveal>
-              <div className="mx-auto max-w-2xl text-center">
-                <p className="mb-4 text-[10px] uppercase tracking-[0.4em] text-white/40">• • • Description</p>
-                <h3 className="text-[clamp(1.6rem,3.2vw,2.4rem)] font-semibold leading-tight tracking-tight">
-                  Traveler version offers extensive functionality and offers, as well as great deals
-                </h3>
-                <p className="mt-6 text-xs text-white/55">Choosing a travel option is now much easier and cheaper</p>
-              </div>
-            </Reveal>
-            <Parallax speed={0.95}>
-              <div className="mt-16 flex justify-center">
-                <img
-                  src={phoneMercedes}
-                  alt="Mercedes booking"
-                  loading="lazy"
-                  width={900}
-                  height={1400}
-                  className="h-auto w-[clamp(260px,40vw,560px)] -rotate-6 drop-shadow-[0_60px_80px_rgba(0,0,0,0.9)] hover:rotate-0 transition-transform duration-700 ease-out"
-                />
-              </div>
-            </Parallax>
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
+            <Atmosphere variant="device" />
+            <div className="relative grid gap-16 lg:grid-cols-12 lg:items-center lg:gap-24">
+              {/* Left: editorial caption stack */}
+              <Reveal className="lg:col-span-5 lg:pl-6">
+                <div>
+                  <TierLabel className="mb-6">Userflow</TierLabel>
+                  <h3
+                    className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
+                    style={{ fontSize: "clamp(1.6rem,3.2vw,2.4rem)" }}
+                  >
+                    Traveler version offers extensive functionality and offers, as well as great deals.
+                  </h3>
+                  <Hairline className="my-8 max-w-[120px]" />
+                  <p className="text-[12px] leading-[1.75] text-white/50" style={{ maxWidth: "38ch" }}>
+                    Choosing a travel option is now effortless — curated rides, transparent pricing, and a
+                    flow that respects the user's time.
+                  </p>
+                </div>
+              </Reveal>
+              {/* Right: tilted phone */}
+              <Parallax speed={0.92} className="lg:col-span-7">
+                <Device className="block lg:translate-x-[6%]">
+                  <img
+                    src={phoneMercedes}
+                    alt="Mercedes booking"
+                    loading="lazy"
+                    decoding="async"
+                    width={900}
+                    height={1400}
+                    className="mx-auto h-auto w-[clamp(260px,38vw,520px)] -rotate-3 drop-shadow-[0_80px_100px_rgba(0,0,0,0.95)] transition-transform duration-[900ms] hover:rotate-0"
+                    style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
+                  />
+                </Device>
+              </Parallax>
+            </div>
           </div>
         </Section>
 
         {/* ===== 08 BALI TOUR ===== */}
         <Section index="07" rightMeta={<span>Tour Screen</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-12 md:grid-cols-[1fr_1.4fr_1fr] md:items-center">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 md:grid-cols-[1fr_1.6fr_0.9fr] md:items-center md:gap-16">
               <Reveal>
                 <div>
-                  <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/40">Type</p>
-                  <h4 className="text-3xl font-semibold tracking-tight">Bali —<br />Indonesia</h4>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-white/60">
-                    <span>★★★★☆</span>
-                    <span>2,450 reviews</span>
+                  <TierLabel className="mb-4">Destination</TierLabel>
+                  <h4 className="text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-[1.05] tracking-[-0.02em]">
+                    Bali —<br /><span className="text-white/55">Indonesia</span>
+                  </h4>
+                  <Hairline className="my-6 max-w-[80px]" />
+                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/55">
+                    <span className="text-white/80">★★★★☆</span>
+                    <span>2,450 REVIEWS</span>
                   </div>
                 </div>
               </Reveal>
               <Parallax speed={0.95}>
-                <div className="relative">
-                  <img src={bali} alt="Bali" loading="lazy" width={1280} height={800} className="h-64 w-full rounded-lg object-cover opacity-90" />
+                <div className="relative overflow-hidden rounded-xl">
+                  <img
+                    src={bali}
+                    alt="Bali"
+                    loading="lazy"
+                    decoding="async"
+                    width={1280}
+                    height={800}
+                    className="h-72 w-full object-cover opacity-90 md:h-80"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(5,5,8,0.85) 100%)",
+                    }}
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.06]"
+                  />
                 </div>
               </Parallax>
               <Reveal delay={150}>
                 <GlassCard>
-                  <div className="mb-3 flex items-center gap-2 text-[10px] text-white/50">★★★★★</div>
-                  <p className="text-xs leading-relaxed text-white/75">
+                  <div className="mb-3 flex items-center gap-2 text-[10px] tracking-[0.2em] text-white/50">★★★★★</div>
+                  <p className="text-[12px] leading-[1.7] text-white/75">
                     An unforgettable trip! Bali is absolutely beautiful, the places we visited were
                     incredible. Highly recommend NexTrip for such amazing experiences.
                   </p>
-                  <div className="mt-4 flex items-center gap-2 text-[10px] text-white/45">
-                    <div className="h-6 w-6 rounded-full bg-white/10" />
-                    Sophia Martinez · 12.06.2024
+                  <Hairline className="my-5" />
+                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/40">
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-white/20 to-white/5" />
+                    SOPHIA MARTINEZ · 12.06.2024
                   </div>
                 </GlassCard>
               </Reveal>
@@ -388,23 +491,25 @@ const Nextrip = () => {
 
         {/* ===== 09 PROFILE / PERSONAS ===== */}
         <Section index="08" rightMeta={<span>Profile</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="device" />
+            <div className="relative grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center md:gap-16">
               <Reveal>
                 <div>
-                  <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/40">About</p>
-                  <p className="text-base leading-relaxed text-white/80">
+                  <TierLabel className="mb-6">About</TierLabel>
+                  <p className="text-[14px] font-light leading-[1.7] text-white/85" style={{ maxWidth: "32ch" }}>
                     The personal profile is equipped with additional settings, flight statistics, as
-                    well as reminders about the upcoming flight
+                    well as reminders about the upcoming flight.
                   </p>
-                  <div className="mt-8 space-y-3 text-xs">
+                  <Hairline className="my-8 max-w-[80px]" />
+                  <div className="space-y-3 text-[10px] tracking-[0.25em]">
                     {[
                       ["BEGINNER", "rgba(255,255,255,0.55)"],
                       ["TRAVELER", "rgba(140,160,255,0.85)"],
                       ["BUSINESSMAN", "rgba(180,140,255,0.85)"],
                     ].map(([label, color]) => (
-                      <div key={label} className="flex items-center gap-2 text-white/70">
-                        <span className="h-2 w-2 rounded-full" style={{ background: color }} />
+                      <div key={label} className="flex items-center gap-3 text-white/65">
+                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
                         {label}
                       </div>
                     ))}
@@ -413,32 +518,32 @@ const Nextrip = () => {
               </Reveal>
               <Reveal delay={120}>
                 <GlassCard className="mx-auto w-full max-w-xs">
-                  <div className="flex items-center justify-between text-[10px] text-white/40">
+                  <div className="flex items-center justify-between text-[10px] text-white/35">
                     <span>≡</span>
                     <NWordmark />
                     <span>✎</span>
                   </div>
                   <div className="mt-6 text-center">
-                    <div className="mx-auto h-16 w-16 rounded-full bg-white/10" />
-                    <div className="mt-3 text-sm">Daniel Jackson</div>
-                    <div className="mt-1 inline-block rounded border border-indigo-400/40 px-2 py-0.5 text-[9px] tracking-[0.25em] text-indigo-200">TRAVELER</div>
+                    <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-white/25 to-white/5 ring-1 ring-white/10" />
+                    <div className="mt-3 text-[13px] tracking-[0.02em]">Daniel Jackson</div>
+                    <div className="mt-2 inline-block rounded border border-white/15 px-2 py-0.5 text-[9px] tracking-[0.3em] text-white/70">TRAVELER</div>
                   </div>
                   <div className="mt-6 grid grid-cols-3 gap-2 text-center text-white/80">
                     {[["Flights", "5"], ["In air", "32h"], ["Flow", "2k km"]].map(([l, v]) => (
-                      <div key={l} className="rounded-md border border-white/10 bg-white/[0.03] py-3">
-                        <div className="text-[9px] uppercase tracking-[0.25em] text-white/40">{l}</div>
-                        <div className="mt-1 text-sm">{v}</div>
+                      <div key={l} className="rounded-md border border-white/[0.07] bg-white/[0.02] py-3 backdrop-blur-sm">
+                        <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">{l}</div>
+                        <div className="mt-1.5 text-[13px]">{v}</div>
                       </div>
                     ))}
                   </div>
-                  <div className="mt-6 rounded-md border border-white/10 bg-white/[0.03] p-3 text-[10px] text-white/60">
-                    <div className="text-[9px] uppercase tracking-[0.25em] text-white/40">Upcoming flight</div>
-                    <div className="mt-2 flex justify-between"><span>24 May</span><span>12:30 — 18:00</span><span>UA114</span></div>
+                  <div className="mt-6 rounded-md border border-white/[0.07] bg-white/[0.02] p-3 text-[10px] text-white/60 backdrop-blur-sm">
+                    <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">Upcoming flight</div>
+                    <div className="mt-2.5 flex justify-between text-[10px] tracking-[0.05em]"><span>24 May</span><span>12:30 — 18:00</span><span className="text-white/85">UA114</span></div>
                   </div>
                 </GlassCard>
               </Reveal>
               <Reveal delay={200}>
-                <p className="text-xs leading-relaxed text-white/55 md:max-w-xs">
+                <p className="text-[12px] leading-[1.75] text-white/55" style={{ maxWidth: "34ch" }}>
                   It is very interesting to know how many hours and distances you have covered over the
                   entire time. You can brag about this to your friends, or compete with them.
                 </p>
@@ -451,17 +556,26 @@ const Nextrip = () => {
         <section className="relative overflow-hidden">
           <Bezel />
           <div className="relative">
+            <Atmosphere variant="wide" />
             <Parallax speed={0.85}>
               <img
                 src={phonesRow}
                 alt="NexTrip product showcase"
                 loading="lazy"
+                decoding="async"
                 width={1920}
                 height={1080}
                 className="h-auto w-full"
               />
             </Parallax>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508]/80 via-transparent to-[#050508]" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508]" />
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 50% at 50% 50%, transparent 30%, rgba(5,5,8,0.7) 100%)",
+              }}
+            />
           </div>
         </section>
       </main>
