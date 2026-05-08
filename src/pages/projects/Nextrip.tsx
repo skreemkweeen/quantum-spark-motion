@@ -156,91 +156,109 @@ const Nextrip = () => {
 
         {/* ===== 02 INTRO ===== */}
         <Section index="01" rightMeta={<span>Overview</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="mb-20 grid gap-10 md:grid-cols-3">
-              <Reveal>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">Application</p>
-                  <NWordmark />
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
+              {/* Left: 2-col editorial copy */}
+              <div className="lg:col-span-7 lg:pr-12">
+                <div className="grid gap-12 sm:grid-cols-2">
+                  <Reveal>
+                    <div>
+                      <TierLabel className="mb-6">Application</TierLabel>
+                      <NWordmark />
+                      <p className="mt-8 text-[11px] leading-[1.7] tracking-[0.05em] text-white/55" style={{ maxWidth: "32ch" }}>
+                        An intelligent travel platform composed for the modern traveler.
+                      </p>
+                    </div>
+                  </Reveal>
+                  <Reveal delay={120}>
+                    <div>
+                      <TierLabel className="mb-6">About</TierLabel>
+                      <p className="text-[17px] font-light leading-[1.6] tracking-[-0.005em] text-white/85" style={{ maxWidth: "28ch" }}>
+                        NexTrip redefines the way people discover, plan, and{" "}
+                        <span className="italic text-white" style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}>experience</span>{" "}
+                        the world.
+                      </p>
+                      <Hairline className="mt-8" />
+                      <p className="mt-6 text-[11px] leading-[1.7] text-white/45" style={{ maxWidth: "36ch" }}>
+                        We combine cutting-edge technology with human insight to create journeys that matter.
+                      </p>
+                    </div>
+                  </Reveal>
                 </div>
-              </Reveal>
-              <Reveal delay={120}>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">About</p>
-                  <p className="text-lg leading-relaxed text-white/85">
-                    NexTrip is an intelligent travel platform that redefines the way people
-                    discover, plan, and <em className="italic text-white">experience</em> the world.
-                  </p>
-                  <p className="mt-6 text-xs leading-relaxed text-white/45">
-                    We combine cutting-edge technology with human insight to create journeys that matter.
-                  </p>
-                </div>
-              </Reveal>
-              <Reveal delay={200}>
-                <div>
-                  <p className="mb-6 text-[9px] uppercase tracking-[0.35em] text-white/40">Main Task</p>
-                  <p className="text-sm leading-relaxed text-white/70">
-                    Millions of travelers face scattered options and complex planning. NexTrip brings
-                    everything together in one seamless experience — saving time, offering clarity, and
-                    unlocking extraordinary journeys.
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-
-            <Parallax speed={0.9} className="flex justify-center">
-              <div className="animate-float-y">
-                <img
-                  src={phoneSearch}
-                  alt="NexTrip search"
-                  loading="lazy"
-                  width={420}
-                  height={840}
-                  className="h-auto w-[clamp(220px,28vw,380px)] drop-shadow-[0_60px_80px_rgba(0,0,0,0.9)]"
-                />
+                <Reveal delay={220}>
+                  <div className="mt-16 max-w-md">
+                    <TierLabel className="mb-6">Main Task</TierLabel>
+                    <p className="text-[13px] leading-[1.75] text-white/65" style={{ maxWidth: "44ch" }}>
+                      Millions of travelers face scattered options and complex planning. NexTrip brings
+                      everything together in one seamless experience — saving time, offering clarity, and
+                      unlocking extraordinary journeys.
+                    </p>
+                  </div>
+                </Reveal>
               </div>
-            </Parallax>
+
+              {/* Right: floating sculptural phone */}
+              <div className="relative lg:col-span-5">
+                <Parallax speed={0.92} className="flex justify-center lg:justify-end">
+                  <Device className="animate-float-y">
+                    <img
+                      src={phoneSearch}
+                      alt="NexTrip search"
+                      loading="lazy"
+                      decoding="async"
+                      width={420}
+                      height={840}
+                      className="h-auto w-[clamp(220px,26vw,360px)] drop-shadow-[0_70px_100px_rgba(0,0,0,0.95)]"
+                    />
+                  </Device>
+                </Parallax>
+              </div>
+            </div>
           </div>
         </Section>
 
         {/* ===== 03 ARCHITECTURE ===== */}
         <Section index="02" rightMeta={<span>Application Structure</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-10 md:grid-cols-3">
-              <Reveal>
-                <div className="space-y-6">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-60" />
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
+              <Reveal className="lg:col-span-3">
+                <div className="space-y-10">
                   <div>
-                    <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/50">MVP</p>
-                    <ul className="space-y-2 text-sm text-white/80">
-                      <li>◦ Business flow</li>
-                      <li>◦ Traveler flow</li>
+                    <TierLabel className="mb-4">MVP</TierLabel>
+                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/75">
+                      <li>— Business flow</li>
+                      <li>— Traveler flow</li>
                     </ul>
                   </div>
+                  <Hairline />
                   <div>
-                    <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/50">Coming</p>
-                    <ul className="space-y-2 text-sm text-white/80">
-                      <li>◦ Tours</li>
-                      <li>◦ Hotel reservations</li>
-                      <li>◦ Car reservation</li>
-                      <li>◦ Concierge</li>
-                      <li>◦ Integrations</li>
+                    <TierLabel className="mb-4">Coming</TierLabel>
+                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/55">
+                      <li>— Tours</li>
+                      <li>— Hotel reservations</li>
+                      <li>— Car reservation</li>
+                      <li>— Concierge</li>
+                      <li>— Integrations</li>
                     </ul>
                   </div>
                 </div>
               </Reveal>
-              <Reveal delay={120}>
+              <Reveal delay={120} className="lg:col-span-6">
                 <UserFlowDiagram />
               </Reveal>
-              <Reveal delay={200}>
+              <Reveal delay={200} className="lg:col-span-3">
                 <div>
-                  <p className="text-base leading-relaxed text-white/80">
-                    Application structure — is an initial development phase of the application
-                    architecture creating process.
+                  <TierLabel className="mb-6">Architecture</TierLabel>
+                  <p className="text-[14px] font-light leading-[1.7] text-white/80" style={{ maxWidth: "30ch" }}>
+                    Application structure — the initial development phase of the architecture process.
                   </p>
-                  <p className="mt-6 text-xs leading-relaxed text-white/45">
-                    This step helps to create a logic of interaction and connection between the screens
-                    without the description for interface elements. It provides an understanding of the
-                    overall functionality for the application development team.
+                  <Hairline className="my-8" />
+                  <p className="text-[11px] leading-[1.75] text-white/45" style={{ maxWidth: "36ch" }}>
+                    A logic of interaction and connection between screens, providing the development team a clear
+                    map of overall functionality before any interface element is designed.
                   </p>
                 </div>
               </Reveal>
