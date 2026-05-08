@@ -4,14 +4,70 @@ import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
 import serviceUxUi from "@/assets/service-uxui.png";
 
 const serviceData: GalleryItem[] = [
-  { common: "UX / UI Design", binomial: "RESEARCH · PROTOTYPE · SHIP", photo: { url: serviceUxUi, text: "UI design interface", pos: "center", by: "01" } },
-  { common: "Graphic Design", binomial: "VISUAL · EDITORIAL · PRINT", photo: { url: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&auto=format&fit=crop&q=80", text: "abstract graphic design", by: "02" } },
-  { common: "Art Direction", binomial: "CONCEPT · VISION · EXECUTE", photo: { url: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&auto=format&fit=crop&q=80", text: "art direction creative", by: "03" } },
-  { common: "Brand Identity", binomial: "MARK · SYSTEM · LANGUAGE", photo: { url: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=900&auto=format&fit=crop&q=80", text: "brand identity colours", by: "04" } },
-  { common: "Web Design", binomial: "LAYOUT · MOTION · CODE", photo: { url: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&auto=format&fit=crop&q=80", text: "web design on screen", by: "05" } },
-  { common: "Motion Design", binomial: "ANIMATE · SEQUENCE · FEEL", photo: { url: "https://images.unsplash.com/photo-1574717024652-8a8fad0f3e98?w=900&auto=format&fit=crop&q=80", text: "motion design blur", by: "06" } },
-  { common: "Marketing", binomial: "REACH · CONVERT · GROW", photo: { url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80", text: "digital marketing analytics", by: "07" } },
-  { common: "Strategy", binomial: "DEFINE · ALIGN · EXECUTE", photo: { url: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&auto=format&fit=crop&q=80", text: "strategy planning", by: "08" } },
+  {
+    common: "UX / UI Design",
+    binomial: "RESEARCH · PROTOTYPE · SHIP",
+    photo: { url: serviceUxUi, text: "UI design interface", pos: "center", by: "01" },
+  },
+  {
+    common: "Graphic Design",
+    binomial: "VISUAL · EDITORIAL · PRINT",
+    photo: {
+      url: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=900&auto=format&fit=crop&q=80",
+      text: "abstract graphic design",
+      by: "02",
+    },
+  },
+  {
+    common: "Art Direction",
+    binomial: "CONCEPT · VISION · EXECUTE",
+    photo: {
+      url: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&auto=format&fit=crop&q=80",
+      text: "art direction creative",
+      by: "03",
+    },
+  },
+  {
+    common: "Brand Identity",
+    binomial: "MARK · SYSTEM · LANGUAGE",
+    photo: {
+      url: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=900&auto=format&fit=crop&q=80",
+      text: "brand identity colours",
+      by: "04",
+    },
+  },
+  {
+    common: "Web Design",
+    binomial: "LAYOUT · MOTION · CODE",
+    photo: {
+      url: "https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&auto=format&fit=crop&q=80",
+      text: "web design on screen",
+      by: "05",
+    },
+  },
+  {
+    common: "Motion Design",
+    binomial: "ANIMATE · SEQUENCE · FEEL",
+    photo: { url: "https://ibb.co/C5VjnD7V?w=900&auto=format&fit=crop&q=80", text: "motion design blur", by: "06" },
+  },
+  {
+    common: "Marketing",
+    binomial: "REACH · CONVERT · GROW",
+    photo: {
+      url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&auto=format&fit=crop&q=80",
+      text: "digital marketing analytics",
+      by: "07",
+    },
+  },
+  {
+    common: "Strategy",
+    binomial: "DEFINE · ALIGN · EXECUTE",
+    photo: {
+      url: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&auto=format&fit=crop&q=80",
+      text: "strategy planning",
+      by: "08",
+    },
+  },
 ];
 
 const arrowBtn: React.CSSProperties = {
@@ -59,8 +115,7 @@ export function WhatWeDo() {
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)",
           backgroundSize: "132px 132px",
-          maskImage:
-            "radial-gradient(ellipse 90% 70% at 50% 50%, #000 40%, transparent 95%)",
+          maskImage: "radial-gradient(ellipse 90% 70% at 50% 50%, #000 40%, transparent 95%)",
         }}
       />
       <div
@@ -77,8 +132,7 @@ export function WhatWeDo() {
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(140,80,255,0.04), transparent 70%)",
+          background: "radial-gradient(ellipse 60% 40% at 50% 50%, rgba(140,80,255,0.04), transparent 70%)",
         }}
       />
 
@@ -114,10 +168,7 @@ export function WhatWeDo() {
       </div>
 
       {/* Carousel stage */}
-      <div
-        className="relative mx-auto mt-16"
-        style={{ height: "clamp(420px, 55vh, 560px)", width: "100%" }}
-      >
+      <div className="relative mx-auto mt-16" style={{ height: "clamp(420px, 55vh, 560px)", width: "100%" }}>
         <CircularGallery items={serviceData} radius={520} rotationOffset={rotationOffset} autoRotateSpeed={0.012} />
         {/* Edge fades for cinematic falloff */}
         <div
@@ -179,7 +230,8 @@ export function WhatWeDo() {
               marginLeft: "auto",
             }}
           >
-            We craft digital systems and experiences that not only meet but exceed the expectations of the brands we build for.
+            We craft digital systems and experiences that not only meet but exceed the expectations of the brands we
+            build for.
           </p>
         </div>
       </div>
