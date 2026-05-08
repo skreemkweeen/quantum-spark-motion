@@ -268,8 +268,9 @@ const Nextrip = () => {
 
         {/* ===== 04 IDENTITY ===== */}
         <Section index="03" rightMeta={<span>Identity</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-6 md:grid-cols-3">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-6 md:grid-cols-3 md:gap-8">
               <GlassCard className="aspect-[3/4] flex-col justify-between flex">
                 <div className="text-[9px] uppercase tracking-[0.3em] text-white/40">Identity</div>
                 <div className="my-auto flex justify-center">
@@ -329,16 +330,18 @@ const Nextrip = () => {
 
         {/* ===== 05 SPLASH ===== */}
         <Section index="04" rightMeta={<span>Splash Screens</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-24">
-            <Ghost className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
-            <Parallax speed={0.95} className="relative">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
+            <Atmosphere variant="wide" />
+            <Ghost align="left" className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
+            <Parallax speed={0.92} className="relative">
               <img
                 src={splashTrio}
                 alt="Splash screens"
                 loading="lazy"
+                decoding="async"
                 width={1600}
                 height={1100}
-                className="mx-auto h-auto w-full max-w-5xl"
+                className="mx-auto h-auto w-full max-w-5xl drop-shadow-[0_80px_120px_rgba(0,0,0,0.95)]"
               />
             </Parallax>
           </div>
@@ -346,14 +349,15 @@ const Nextrip = () => {
 
         {/* ===== 06 DESCRIPTION ===== */}
         <Section index="05" rightMeta={<span>Description</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-32">
+          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
+            <Atmosphere variant="wide" />
             <img
               src={clouds}
               alt=""
               loading="lazy"
               width={1920}
               height={800}
-              className="pointer-events-none absolute -left-10 top-10 h-auto w-1/2 opacity-70"
+              className="pointer-events-none absolute -left-10 top-10 h-auto w-1/2 opacity-50 mix-blend-screen"
             />
             <img
               src={clouds}
@@ -361,19 +365,23 @@ const Nextrip = () => {
               loading="lazy"
               width={1920}
               height={800}
-              className="pointer-events-none absolute -right-10 bottom-10 h-auto w-1/2 -scale-x-100 opacity-50"
+              className="pointer-events-none absolute -right-10 bottom-10 h-auto w-1/2 -scale-x-100 opacity-35 mix-blend-screen"
             />
             <Reveal>
               <div className="relative mx-auto max-w-3xl text-center">
-                <p className="mb-6 text-[10px] uppercase tracking-[0.4em] text-white/40">• • • Description</p>
-                <h3 className="text-[clamp(1.6rem,3.5vw,2.6rem)] font-semibold leading-tight tracking-tight">
+                <TierLabel className="mb-8">Description</TierLabel>
+                <h3
+                  className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
+                  style={{ fontSize: "clamp(1.7rem,3.6vw,2.8rem)" }}
+                >
                   Simplified and personalized experience provides the highest degree of comfort to users
                 </h3>
-                <p className="mx-auto mt-8 max-w-md text-xs leading-relaxed text-white/55">
+                <Hairline className="mx-auto mt-10 max-w-[120px]" />
+                <p className="mx-auto mt-8 max-w-md text-[12px] leading-[1.75] text-white/50">
                   We have done a lot of research on the leading applications in this industry, took into
                   account all their shortcomings and made the best solution.
                 </p>
-                <div className="mt-12 flex justify-center">
+                <div className="mt-14 flex justify-center">
                   <NWordmark />
                 </div>
               </div>
@@ -383,60 +391,97 @@ const Nextrip = () => {
 
         {/* ===== 07 USERFLOW STATEMENT + CAR ===== */}
         <Section index="06" rightMeta={<span>Userflow</span>}>
-          <div className="relative mx-auto max-w-7xl px-6 py-24">
-            <Reveal>
-              <div className="mx-auto max-w-2xl text-center">
-                <p className="mb-4 text-[10px] uppercase tracking-[0.4em] text-white/40">• • • Description</p>
-                <h3 className="text-[clamp(1.6rem,3.2vw,2.4rem)] font-semibold leading-tight tracking-tight">
-                  Traveler version offers extensive functionality and offers, as well as great deals
-                </h3>
-                <p className="mt-6 text-xs text-white/55">Choosing a travel option is now much easier and cheaper</p>
-              </div>
-            </Reveal>
-            <Parallax speed={0.95}>
-              <div className="mt-16 flex justify-center">
-                <img
-                  src={phoneMercedes}
-                  alt="Mercedes booking"
-                  loading="lazy"
-                  width={900}
-                  height={1400}
-                  className="h-auto w-[clamp(260px,40vw,560px)] -rotate-6 drop-shadow-[0_60px_80px_rgba(0,0,0,0.9)] hover:rotate-0 transition-transform duration-700 ease-out"
-                />
-              </div>
-            </Parallax>
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
+            <Atmosphere variant="device" />
+            <div className="relative grid gap-16 lg:grid-cols-12 lg:items-center lg:gap-24">
+              {/* Left: editorial caption stack */}
+              <Reveal className="lg:col-span-5 lg:pl-6">
+                <div>
+                  <TierLabel className="mb-6">Userflow</TierLabel>
+                  <h3
+                    className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
+                    style={{ fontSize: "clamp(1.6rem,3.2vw,2.4rem)" }}
+                  >
+                    Traveler version offers extensive functionality and offers, as well as great deals.
+                  </h3>
+                  <Hairline className="my-8 max-w-[120px]" />
+                  <p className="text-[12px] leading-[1.75] text-white/50" style={{ maxWidth: "38ch" }}>
+                    Choosing a travel option is now effortless — curated rides, transparent pricing, and a
+                    flow that respects the user's time.
+                  </p>
+                </div>
+              </Reveal>
+              {/* Right: tilted phone */}
+              <Parallax speed={0.92} className="lg:col-span-7">
+                <Device className="block lg:translate-x-[6%]">
+                  <img
+                    src={phoneMercedes}
+                    alt="Mercedes booking"
+                    loading="lazy"
+                    decoding="async"
+                    width={900}
+                    height={1400}
+                    className="mx-auto h-auto w-[clamp(260px,38vw,520px)] -rotate-3 drop-shadow-[0_80px_100px_rgba(0,0,0,0.95)] transition-transform duration-[900ms] hover:rotate-0"
+                    style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
+                  />
+                </Device>
+              </Parallax>
+            </div>
           </div>
         </Section>
 
         {/* ===== 08 BALI TOUR ===== */}
         <Section index="07" rightMeta={<span>Tour Screen</span>}>
-          <div className="mx-auto max-w-7xl px-6 py-24">
-            <div className="grid gap-12 md:grid-cols-[1fr_1.4fr_1fr] md:items-center">
+          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
+            <Atmosphere variant="editorial" />
+            <div className="relative grid gap-12 md:grid-cols-[1fr_1.6fr_0.9fr] md:items-center md:gap-16">
               <Reveal>
                 <div>
-                  <p className="mb-3 text-[10px] uppercase tracking-[0.3em] text-white/40">Type</p>
-                  <h4 className="text-3xl font-semibold tracking-tight">Bali —<br />Indonesia</h4>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-white/60">
-                    <span>★★★★☆</span>
-                    <span>2,450 reviews</span>
+                  <TierLabel className="mb-4">Destination</TierLabel>
+                  <h4 className="text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-[1.05] tracking-[-0.02em]">
+                    Bali —<br /><span className="text-white/55">Indonesia</span>
+                  </h4>
+                  <Hairline className="my-6 max-w-[80px]" />
+                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/55">
+                    <span className="text-white/80">★★★★☆</span>
+                    <span>2,450 REVIEWS</span>
                   </div>
                 </div>
               </Reveal>
               <Parallax speed={0.95}>
-                <div className="relative">
-                  <img src={bali} alt="Bali" loading="lazy" width={1280} height={800} className="h-64 w-full rounded-lg object-cover opacity-90" />
+                <div className="relative overflow-hidden rounded-xl">
+                  <img
+                    src={bali}
+                    alt="Bali"
+                    loading="lazy"
+                    decoding="async"
+                    width={1280}
+                    height={800}
+                    className="h-72 w-full object-cover opacity-90 md:h-80"
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(5,5,8,0.85) 100%)",
+                    }}
+                  />
+                  <div
+                    className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.06]"
+                  />
                 </div>
               </Parallax>
               <Reveal delay={150}>
                 <GlassCard>
-                  <div className="mb-3 flex items-center gap-2 text-[10px] text-white/50">★★★★★</div>
-                  <p className="text-xs leading-relaxed text-white/75">
+                  <div className="mb-3 flex items-center gap-2 text-[10px] tracking-[0.2em] text-white/50">★★★★★</div>
+                  <p className="text-[12px] leading-[1.7] text-white/75">
                     An unforgettable trip! Bali is absolutely beautiful, the places we visited were
                     incredible. Highly recommend NexTrip for such amazing experiences.
                   </p>
-                  <div className="mt-4 flex items-center gap-2 text-[10px] text-white/45">
-                    <div className="h-6 w-6 rounded-full bg-white/10" />
-                    Sophia Martinez · 12.06.2024
+                  <Hairline className="my-5" />
+                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/40">
+                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-white/20 to-white/5" />
+                    SOPHIA MARTINEZ · 12.06.2024
                   </div>
                 </GlassCard>
               </Reveal>
