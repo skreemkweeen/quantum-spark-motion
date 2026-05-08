@@ -5,13 +5,11 @@ import { gsap } from "gsap";
 type Phrase = [line1: string, line2: string];
 
 const PHRASES: Phrase[] = [
-  ["WE DESIGN", "WHAT THE FUTURE FEELS LIKE"],
-  ["DIGITAL WORLDS", "BUILT WITH INTENTION"],
+  ["WE DESIGN", "WHAT'S NEXT"],
+  ["DIGITAL WORLDS,", "BUILT WITH INTENTION"],
   ["BRANDS ENGINEERED", "FOR THE NEXT ERA"],
-  ["DESIGNING SIGNALS", "IN THE DIGITAL VOID"],
-  ["WHERE INTERFACES", "BECOME EXPERIENCES"],
-  ["MOTION ·", "INTERFACE · ATMOSPHERE"],
-  ["THE FUTURE HAS", "A VISUAL LANGUAGE"],
+  ["INTERFACES", "BECOME EXPERIENCES"],
+  ["MOTION · INTERFACE", "· ATMOSPHERE"],
   ["BUILDING BRANDS", "THAT FEEL ALIVE"],
 ];
 
@@ -129,11 +127,11 @@ export function TheInfiniteGrid() {
   const [line1, line2] = PHRASES[phraseIdx];
 
   return (
-    <section ref={heroRef as React.RefObject<HTMLElement>} className="relative flex h-screen min-h-[700px] w-full flex-col items-center justify-center overflow-hidden" style={{ background:"#050508" }}>
+    <section ref={heroRef as React.RefObject<HTMLElement>} className="relative flex h-[92vh] min-h-[620px] w-full flex-col items-center justify-center overflow-hidden" style={{ background:"#050508" }}>
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" style={{ display:"block" }} />
       <div className="pointer-events-none absolute inset-0" style={{ background:"radial-gradient(ellipse 85% 65% at 50% 50%,rgba(12,12,18,0) 25%,rgba(5,5,8,0.82) 100%)" }} />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-36" style={{ background:"linear-gradient(to bottom,#050508,transparent)" }} />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36" style={{ background:"linear-gradient(to top,#050508,transparent)" }} />
+      {/* No bottom fade — hero seamlessly merges into the portfolio section which shares the same #050508 background */}
       <div className="pointer-events-none absolute inset-0" style={{ background:"radial-gradient(ellipse 50% 28% at 50% 42%,rgba(220,222,240,0.018) 0%,transparent 55%)" }} />
       <motion.div className="pointer-events-none absolute inset-x-0 px-8 md:px-16" style={{ top:"18%" }} initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ duration:1.8, delay:1.2 }}>
         <div className="h-px w-full" style={{ background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.055) 20%,rgba(255,255,255,0.055) 80%,transparent)" }} />
@@ -162,23 +160,23 @@ export function TheInfiniteGrid() {
           <span className="text-[8px] uppercase tracking-[0.38em]" style={{ color:"rgba(255,255,255,0.20)" }}>LIVE</span>
         </div>
       </motion.div>
-      <div ref={typRef} className="relative z-10 flex flex-col items-center px-6 text-center">
-        <div style={{ overflow:"hidden", marginBottom:36 }}>
+      <div ref={typRef} className="relative z-10 flex flex-col items-center px-6 text-center" style={{ marginTop:"-4vh" }}>
+        <div style={{ overflow:"hidden", marginBottom:24 }}>
           <p data-r className="text-[9px] uppercase tracking-[0.50em]" style={{ color:"rgba(255,255,255,0.20)" }}>Est. 2026 · Digital Design Studio</p>
         </div>
-        <div className="relative w-full" style={{ minHeight:"clamp(4rem,14vw,16rem)" }}>
+        <div className="relative w-full" style={{ minHeight:"clamp(6rem,12vw,11rem)" }}>
           <AnimatePresence mode="wait">
             <motion.div key={phraseIdx} className="absolute inset-x-0 top-0 text-center" initial={{ opacity:0, y:22, filter:"blur(10px)" }} animate={{ opacity:1, y:0, filter:"blur(0px)" }} exit={{ opacity:0, y:-18, filter:"blur(8px)" }} transition={{ duration:0.9, ease:[0.16,1,0.3,1] }}>
-              <span style={{ display:"block", fontSize:"clamp(2rem,7vw,8rem)", fontWeight:800, letterSpacing:"-0.03em", lineHeight:0.88, color:"#fff" }}>{line1}</span>
-              <span style={{ display:"block", fontSize:"clamp(2rem,7vw,8rem)", fontWeight:800, letterSpacing:"-0.03em", lineHeight:0.88, color:"rgba(255,255,255,0.58)", marginTop:"0.12em" }}>{line2}</span>
+              <span style={{ display:"block", fontSize:"clamp(1.9rem,5.6vw,5.5rem)", fontWeight:700, letterSpacing:"-0.035em", lineHeight:0.96, color:"#fff" }}>{line1}</span>
+              <span style={{ display:"block", fontSize:"clamp(1.9rem,5.6vw,5.5rem)", fontWeight:700, letterSpacing:"-0.035em", lineHeight:0.96, color:"rgba(255,255,255,0.5)", marginTop:"0.08em" }}>{line2}</span>
             </motion.div>
           </AnimatePresence>
         </div>
-        <motion.div className="h-px" style={{ width:"min(12rem,70vw)", marginTop:32, marginBottom:28, background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.20) 50%,transparent)" }} initial={{ scaleX:0, opacity:0 }} animate={inView?{scaleX:1,opacity:1}:{}} transition={{ duration:1.6, ease:[0.16,1,0.3,1], delay:0.9 }} />
+        <motion.div className="h-px" style={{ width:"min(10rem,60vw)", marginTop:24, marginBottom:20, background:"linear-gradient(90deg,transparent,rgba(255,255,255,0.20) 50%,transparent)" }} initial={{ scaleX:0, opacity:0 }} animate={inView?{scaleX:1,opacity:1}:{}} transition={{ duration:1.6, ease:[0.16,1,0.3,1], delay:0.9 }} />
         <div style={{ overflow:"hidden" }}>
-          <p data-r className="max-w-sm text-[12px] leading-loose" style={{ color:"rgba(255,255,255,0.25)", letterSpacing:"0.07em" }}>Brand systems · Digital experiences · Motion identity<br />for the brands that define what comes next.</p>
+          <p data-r className="max-w-sm text-[11.5px] leading-relaxed" style={{ color:"rgba(255,255,255,0.32)", letterSpacing:"0.06em" }}>Brand systems · Digital experiences · Motion identity — for the brands defining what comes next.</p>
         </div>
-        <div className="mt-12 flex flex-wrap items-center justify-center gap-8">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-7">
           <div style={{ overflow:"hidden" }}>
             <a data-r href="/#work" className="group flex items-center gap-3" style={{ color:"rgba(255,255,255,0.40)" }}>
               <span className="inline-block h-px transition-all duration-500 ease-out group-hover:w-14" style={{ width:22, background:"currentColor" }} />
@@ -190,7 +188,15 @@ export function TheInfiniteGrid() {
           </div>
         </div>
       </div>
-      <motion.div className="pointer-events-none absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2" initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ duration:1, delay:2.2 }}>
+      {/* Hint of portfolio underneath — soft "Selected Work" preview line peeking from the fold */}
+      <motion.div className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center" initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ duration:1.4, delay:2 }}>
+        <div className="flex w-full max-w-7xl items-center gap-4 px-8">
+          <span className="text-[8px] uppercase tracking-[0.42em]" style={{ color:"rgba(255,255,255,0.22)" }}>↓ Selected Work</span>
+          <div className="h-px flex-1" style={{ background:"linear-gradient(90deg,rgba(255,255,255,0.14),transparent)" }} />
+          <span className="text-[8px] uppercase tracking-[0.42em]" style={{ color:"rgba(255,255,255,0.14)" }}>2026 / Archive</span>
+        </div>
+      </motion.div>
+      <motion.div className="pointer-events-none absolute bottom-20 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2" initial={{ opacity:0 }} animate={inView?{opacity:1}:{}} transition={{ duration:1, delay:2.2 }}>
         <motion.div className="h-10 w-px" style={{ background:"linear-gradient(to bottom,transparent,rgba(255,255,255,0.28),transparent)" }} animate={{ scaleY:[1,0.3,1], opacity:[0.4,0.8,0.4] }} transition={{ duration:2.6, repeat:Infinity, ease:"easeInOut" }} />
         <p className="text-[7px] uppercase tracking-[0.38em]" style={{ color:"rgba(255,255,255,0.14)" }}>Scroll</p>
       </motion.div>
