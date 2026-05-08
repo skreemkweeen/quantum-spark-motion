@@ -192,6 +192,119 @@ All colors MUST be HSL.
   100% { transform: translateX(130%); }
 }
 
+/* ===== ELEMENT UX cinematic logo ===== */
+.eux-logo {
+  font-family: "Orbitron", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: clamp(13px, 1.05vw, 16px);
+  color: hsl(0 0% 96%);
+  text-shadow: 0 0 0 transparent;
+  transition: text-shadow 0.4s ease, color 0.4s ease;
+}
+.eux-logo .eux-mark {
+  display: inline-block;
+  width: 1.05em;
+  height: 0.62em;
+  margin-right: 0.55em;
+  vertical-align: -0.04em;
+  position: relative;
+}
+.eux-logo .eux-mark::before,
+.eux-logo .eux-mark::after,
+.eux-logo .eux-mark > i {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+}
+.eux-logo .eux-mark::before { top: 0; width: 70%; transform: skewX(-22deg); }
+.eux-logo .eux-mark > i      { top: 50%; width: 90%; transform: translateY(-50%) skewX(-22deg); }
+.eux-logo .eux-mark::after  { bottom: 0; width: 70%; transform: skewX(-22deg); }
+
+.eux-logo .eux-text {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+.eux-logo .eux-text::before,
+.eux-logo .eux-text::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+.eux-logo .eux-text::before { color: hsl(0 90% 60%); }
+.eux-logo .eux-text::after  { color: hsl(180 90% 60%); }
+
+.eux-logo[data-active="true"] {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255,255,255,0.18);
+}
+.eux-logo[data-active="true"] .eux-text {
+  animation: eux-slice 0.5s steps(1, end);
+}
+.eux-logo[data-active="true"] .eux-text::before {
+  animation: eux-rgb-r 0.5s ease-out;
+}
+.eux-logo[data-active="true"] .eux-text::after {
+  animation: eux-rgb-c 0.5s ease-out;
+}
+
+@keyframes eux-rgb-r {
+  0%   { opacity: 0; transform: translate(0,0); }
+  20%  { opacity: 0.9; transform: translate(2px, -1px); }
+  45%  { opacity: 0.6; transform: translate(-1.5px, 1px); }
+  70%  { opacity: 0.4; transform: translate(1px, 0); }
+  100% { opacity: 0; transform: translate(0,0); }
+}
+@keyframes eux-rgb-c {
+  0%   { opacity: 0; transform: translate(0,0); }
+  20%  { opacity: 0.9; transform: translate(-2px, 1px); }
+  45%  { opacity: 0.6; transform: translate(1.5px, -1px); }
+  70%  { opacity: 0.4; transform: translate(-1px, 0); }
+  100% { opacity: 0; transform: translate(0,0); }
+}
+@keyframes eux-slice {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translateX(0); filter: blur(0); }
+  15% { clip-path: inset(8% 0 75% 0); transform: translateX(2px); filter: blur(0.4px); }
+  30% { clip-path: inset(55% 0 18% 0); transform: translateX(-2px); }
+  45% { clip-path: inset(30% 0 50% 0); transform: translateX(1.5px); filter: blur(0.3px); }
+  60% { clip-path: inset(78% 0 6% 0); transform: translateX(-1px); }
+  80% { clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+
+/* idle ambient micro-flicker */
+@keyframes eux-ambient {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.86; }
+  94% { opacity: 1; }
+  96% { opacity: 0.92; }
+  97% { opacity: 1; }
+}
+.eux-logo .eux-text > span {
+  animation: eux-ambient 7s linear infinite;
+}
+
+/* telemetry tick lines that briefly extend on hover */
+.eux-logo .eux-tick {
+  display: inline-block;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+  vertical-align: middle;
+  transition: width 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s ease;
+  margin: 0 0.4em;
+}
+.eux-logo[data-active="true"] .eux-tick {
+  width: 14px;
+  opacity: 0.9;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
