@@ -100,46 +100,55 @@ const Nextrip = () => {
 
       <main className="relative z-10 pt-24">
         {/* ===== 01 HERO ===== */}
-        <section className="relative overflow-hidden px-6 pb-32 pt-12">
-          <div className="mx-auto max-w-7xl">
+        <section className="relative overflow-hidden px-6 pb-40 pt-16 md:pb-48 lg:pb-56">
+          <Atmosphere variant="hero" />
+          <div className="relative mx-auto max-w-7xl">
             <Reveal>
-              <div className="flex flex-wrap items-start justify-between gap-6 text-[10px] uppercase tracking-[0.35em] text-white/45">
-                <Link to="/#work" className="hover:text-white">← Work</Link>
-                <div className="flex items-center gap-12">
+              <div className="flex flex-wrap items-start justify-between gap-6 text-[9px] uppercase tracking-[0.4em] text-white/40">
+                <Link to="/#work" className="transition-colors hover:text-white/90">← Work</Link>
+                <div className="flex items-center gap-10 md:gap-14">
                   <Meta label="Name" value="NexTrip" />
                   <Meta label="Type" value="Travel Platform" />
                   <Meta label="Year" value="2024" />
-                  <span className="grid h-7 w-7 place-items-center rounded-full border border-white/10 text-white/50">©</span>
+                  <span className="grid h-7 w-7 place-items-center rounded-full border border-white/[0.08] text-white/40">©</span>
                 </div>
               </div>
             </Reveal>
 
-            <div className="relative mt-16 flex min-h-[70vh] items-center justify-center">
-              <Ghost className="top-1/2 -translate-y-1/2">nextrip</Ghost>
-              <Parallax speed={1.1} className="relative z-10">
-                <div className="animate-float-y">
+            <div className="relative mt-20 flex min-h-[72vh] items-center justify-center md:mt-28">
+              <Ghost align="right" className="top-1/2 -translate-y-1/2">nextrip</Ghost>
+              {/* off-axis vertical guide */}
+              <div className="pointer-events-none absolute left-[42%] top-0 h-full w-px bg-gradient-to-b from-transparent via-white/[0.07] to-transparent" />
+              <Parallax speed={1.05} className="relative z-10 -translate-x-[6%]">
+                <Device className="animate-float-y">
                   <img
                     src={heroJet}
                     alt="NexTrip"
                     width={620}
                     height={620}
-                    className="mx-auto h-auto w-[clamp(280px,42vw,620px)] drop-shadow-[0_50px_80px_rgba(0,0,0,0.8)]"
+                    className="mx-auto h-auto w-[clamp(280px,40vw,580px)] drop-shadow-[0_60px_100px_rgba(0,0,0,0.9)]"
                   />
-                </div>
+                </Device>
               </Parallax>
-              {/* vertical guide */}
-              <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
-              {/* N badge */}
-              <div className="absolute right-[20%] top-1/2 hidden translate-y-12 md:block">
-                <div className="grid h-14 w-14 place-items-center rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md">
+              {/* N badge — repositioned for asymmetric balance */}
+              <div className="absolute right-[14%] top-[58%] hidden md:block">
+                <div
+                  className="grid h-14 w-14 place-items-center rounded-xl border border-white/[0.08] backdrop-blur-md"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+                  }}
+                >
                   <NMark size={28} />
                 </div>
               </div>
             </div>
 
-            <div className="mt-16 flex items-center justify-between text-[10px] uppercase tracking-[0.3em] text-white/35">
-              <span>40°42'46"N — 74°00'21"W</span>
+            <div className="mt-20 flex items-center justify-between text-[9px] uppercase tracking-[0.4em] text-white/30">
+              <span>40°42′46″N — 74°00′21″W</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
               <span>Est. 2024</span>
+              <Hairline className="mx-8 hidden flex-1 md:block" />
               <span className="hidden md:inline">© NexTrip</span>
             </div>
           </div>
