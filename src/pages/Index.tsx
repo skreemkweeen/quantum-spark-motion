@@ -11,8 +11,8 @@ const Index = () => (
     <Nav />
     <main>
       <TheInfiniteGrid />
-      <WhatWeDo />
       <Projects />
+      <WhatWeDo />
       <SectionDivider variant="deep" />
       <Devices />
     </main>
