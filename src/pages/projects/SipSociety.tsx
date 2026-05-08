@@ -4,6 +4,7 @@ import { Reveal } from "@/components/Reveal";
 import { LiquidStack } from "@/components/LiquidStack";
 import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import sipHero from "@/assets/sip-hero.png";
+import sipHeroVideo from "@/assets/sip-hero.mp4";
 import sipSplash from "@/assets/sip-splash.png";
 import sipPackaging from "@/assets/sip-packaging.png";
 import sipFlavors from "@/assets/sip-flavors.png";
@@ -23,7 +24,20 @@ const SipSociety = () => (
   <div className="min-h-screen bg-background text-foreground">
     <Nav />
     <main>
-      <section className="relative px-6 pt-32">
+      <section className="relative h-[88vh] min-h-[560px] w-full overflow-hidden bg-background">
+        <video
+          src={sipHeroVideo}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={sipHero}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div aria-hidden className="pointer-events-none absolute inset-0" style={{ background:"linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.55) 85%, hsl(var(--background)) 100%)" }} />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-40" style={{ background:"linear-gradient(to top, hsl(var(--background)), transparent)" }} />
+      </section>
+      <section className="relative px-6 pt-24">
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <Link to="/#work" className="text-[10px] uppercase tracking-[0.3em] text-[hsl(var(--muted-fg))] hover:text-foreground">
