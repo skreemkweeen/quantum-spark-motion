@@ -538,38 +538,11 @@ export default function Nextrip() {
       </section>
 
       {/* FOOTER */}
-      <section className="relative flex min-h-[70vh] items-center justify-center px-8 py-32 text-center">
-        <Atmos variant="hero" />
-
-        <div>
-          <Reveal>
-            <div style={labelXS}>Project Complete</div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <h2
-              className="mt-10"
-              style={{
-                fontFamily: fontDisplay,
-                fontSize: "clamp(4rem,12vw,10rem)",
-                lineHeight: 0.9,
-                letterSpacing: "-0.05em",
-                background: "linear-gradient(180deg,#ffffff,#8b8b95)",
-                WebkitBackgroundClip: "text",
-                color: "transparent",
-              }}
-            >
-              NexTrip
-            </h2>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="mt-8" style={labelXS}>
-              Designed · Composed · Delivered
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      <CinematicProjectFooter
+        projectTitle="NEXTRIP"
+        ribbonPhrases={["LUXURY TRAVEL", "AVIATION UI", "FUTURISTIC BOOKING", "CINEMATIC EXPERIENCE"]}
+        nextProject={{ title: "Vanta", slug: "vanta" }}
+      />
     </main>
   );
 }
