@@ -1,6 +1,6 @@
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import heroJet from "@/assets/nextrip/hero-jet-top.png";
@@ -303,7 +303,7 @@ const RAIL = [
   { id: "showcase", label: "Showcase" },
 ];
 const SectionRail = () => {
-  const [active, setActive] = (require as any) ? useStateActive() : [0, () => {}];
+  const [active] = useStateActive();
   return (
     <nav className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
       <ul className="flex flex-col items-end gap-3.5">
@@ -333,8 +333,7 @@ const SectionRail = () => {
     </nav>
   );
 };
-function useStateActive(): [number, (n: number) => void] {
-  const { useState, useEffect } = require("react") as typeof import("react");
+function useStateActive(): [number] {
   const [a, s] = useState(0);
   useEffect(() => {
     const els = RAIL.map(i => document.getElementById(i.id)).filter(Boolean) as HTMLElement[];
@@ -350,7 +349,7 @@ function useStateActive(): [number, (n: number) => void] {
     els.forEach(el => io.observe(el));
     return () => io.disconnect();
   }, []);
-  return [a, s];
+  return [a];
 }
 
 /* =========================================================================
