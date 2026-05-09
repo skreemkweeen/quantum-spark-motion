@@ -8,6 +8,7 @@ import { Section, Bezel } from "@/components/nextrip/SectionFrame";
 import { NMark, NWordmark } from "@/components/nextrip/NMark";
 import { UserFlowDiagram } from "@/components/nextrip/UserFlowDiagram";
 import { Atmosphere, Device } from "@/components/nextrip/Atmosphere";
+import { CursorGlow, ScrollProgress, SectionRail } from "@/components/nextrip/CinematicLayers";
 
 import heroJet from "@/assets/nextrip/hero-jet-top.png";
 import phoneSearch from "@/assets/nextrip/phone-search.png";
@@ -97,10 +98,13 @@ const Nextrip = () => {
       />
 
       <Nav />
+      <ScrollProgress />
+      <CursorGlow />
+      <SectionRail />
 
       <main className="relative z-10 pt-24">
         {/* ===== 01 HERO ===== */}
-        <section className="relative overflow-hidden px-6 pb-48 pt-16 md:pb-56 lg:pb-72">
+        <section id="hero" className="relative overflow-hidden px-6 pb-48 pt-16 md:pb-56 lg:pb-72">
           <Atmosphere variant="hero" />
           {/* deeper cinematic light bloom behind jet */}
           <div
@@ -247,7 +251,7 @@ const Nextrip = () => {
         </section>
 
         {/* ===== 02 INTRO ===== */}
-        <Section index="01" rightMeta={<span>Overview</span>}>
+        <Section index="01" rightMeta={<span>Overview</span>} id="overview">
           <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="editorial" />
             {/* layered gradient depth */}
@@ -378,7 +382,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 03 ARCHITECTURE ===== */}
-        <Section index="02" rightMeta={<span>Application Structure</span>}>
+        <Section index="02" rightMeta={<span>Application Structure</span>} id="architecture">
           <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
             <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-60" />
             <Atmosphere variant="editorial" />
@@ -426,7 +430,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 04 IDENTITY ===== */}
-        <Section index="03" rightMeta={<span>Identity</span>}>
+        <Section index="03" rightMeta={<span>Identity</span>} id="identity">
           <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="editorial" />
             {/* cinematic ambient lighting layers */}
@@ -578,7 +582,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 05 SPLASH ===== */}
-        <Section index="04" rightMeta={<span>Splash Screens</span>}>
+        <Section index="04" rightMeta={<span>Splash Screens</span>} id="splash">
           <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="wide" />
 
@@ -707,7 +711,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 06 DESCRIPTION ===== */}
-        <Section index="05" rightMeta={<span>Description</span>}>
+        <Section index="05" rightMeta={<span>Description</span>} id="description">
           <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
             <Atmosphere variant="wide" />
             <img
@@ -749,7 +753,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 07 USERFLOW STATEMENT + CAR ===== */}
-        <Section index="06" rightMeta={<span>Userflow</span>}>
+        <Section index="06" rightMeta={<span>Userflow</span>} id="userflow">
           <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
             <Atmosphere variant="device" />
             <div className="relative grid gap-16 lg:grid-cols-12 lg:items-center lg:gap-24">
@@ -790,7 +794,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 08 BALI TOUR ===== */}
-        <Section index="07" rightMeta={<span>Tour Screen</span>}>
+        <Section index="07" rightMeta={<span>Tour Screen</span>} id="tour">
           <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
             <Atmosphere variant="editorial" />
             <div className="relative grid gap-12 md:grid-cols-[1fr_1.6fr_0.9fr] md:items-center md:gap-16">
@@ -828,6 +832,18 @@ const Nextrip = () => {
                   <div
                     className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.06]"
                   />
+                  {/* editorial destination overlay */}
+                  <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-5 text-[8px] uppercase tracking-[0.45em] text-white/70">
+                    <span>08°40′S · 115°12′E</span>
+                    <span>Tour · 07</span>
+                  </div>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-5">
+                    <div className="text-[8px] uppercase tracking-[0.45em] text-white/65">
+                      <div>Indonesia</div>
+                      <div className="mt-1 text-white/40">Curated · 7 Days</div>
+                    </div>
+                    <div className="h-px w-16 bg-white/40" />
+                  </div>
                 </div>
               </Parallax>
               <Reveal delay={150}>
@@ -849,7 +865,7 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 09 PROFILE / PERSONAS ===== */}
-        <Section index="08" rightMeta={<span>Profile</span>}>
+        <Section index="08" rightMeta={<span>Profile</span>} id="profile">
           <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
             <Atmosphere variant="device" />
             <div className="relative grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center md:gap-16">
@@ -912,8 +928,31 @@ const Nextrip = () => {
         </Section>
 
         {/* ===== 10 CLOSING SHELF ===== */}
-        <section className="relative overflow-hidden">
+        <section id="showcase" className="relative overflow-hidden">
           <Bezel />
+          {/* editorial header */}
+          <div className="relative mx-auto flex max-w-7xl items-end justify-between px-6 pt-16 pb-10 md:pt-24 md:pb-14">
+            <div>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-10 bg-white/30" />
+                <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Showcase · 09</span>
+              </div>
+              <h3
+                className="mt-6 max-w-[22ch] font-light leading-[1.1] tracking-[-0.02em] text-white/95"
+                style={{ fontSize: "clamp(1.4rem,2.6vw,2.2rem)" }}
+              >
+                A complete{" "}
+                <span className="italic" style={{ fontFamily: "Georgia, serif" }}>
+                  ecosystem
+                </span>
+                , staged as one continuous frame.
+              </h3>
+            </div>
+            <div className="hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/30 md:block">
+              <div>Final Cut · 04</div>
+              <div className="mt-1 text-white/15">Studio Light · Cool</div>
+            </div>
+          </div>
           <div className="relative">
             <Atmosphere variant="wide" />
             <Parallax speed={0.85}>
@@ -925,6 +964,10 @@ const Nextrip = () => {
                 width={1920}
                 height={1080}
                 className="h-auto w-full"
+                style={{
+                  filter:
+                    "drop-shadow(0 60px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 80px rgba(220,230,245,0.10))",
+                }}
               />
             </Parallax>
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508]" />
@@ -935,6 +978,14 @@ const Nextrip = () => {
                   "radial-gradient(ellipse 60% 50% at 50% 50%, transparent 30%, rgba(5,5,8,0.7) 100%)",
               }}
             />
+          </div>
+          {/* editorial footer rail */}
+          <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 pb-20 pt-10 text-[8px] uppercase tracking-[0.45em] text-white/30 md:pb-28">
+            <span>End · NexTrip</span>
+            <Hairline className="mx-8 hidden flex-1 md:block" />
+            <span>Designed · Composed · Delivered</span>
+            <Hairline className="mx-8 hidden flex-1 md:block" />
+            <span>© 2024</span>
           </div>
         </section>
       </main>

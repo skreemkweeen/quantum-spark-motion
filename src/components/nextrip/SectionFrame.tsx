@@ -79,6 +79,7 @@ export const Section = ({
   className,
   bezelTop = true,
   bezelBottom = false,
+  id,
 }: {
   index: string;
   rightMeta?: ReactNode;
@@ -86,8 +87,9 @@ export const Section = ({
   className?: string;
   bezelTop?: boolean;
   bezelBottom?: boolean;
+  id?: string;
 }) => (
-  <section className={cn("relative", className)}>
+  <section id={id} className={cn("relative", className)}>
     {bezelTop && <Bezel />}
     <SectionHeader index={index} rightMeta={rightMeta} />
     <div className="relative">{children}</div>
