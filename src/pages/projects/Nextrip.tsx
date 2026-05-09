@@ -2,7 +2,7 @@ import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ReactNode, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import CinematicProjectFooter from "@/components/CinematicProjectFooter";
+import { CinematicProjectFooter } from "@/components/footer/CinematicProjectFooter";
 import heroJet from "@/assets/nextrip/hero-jet-top.png";
 import phoneSearch from "@/assets/nextrip/phone-search.png";
 import splashTrio from "@/assets/nextrip/splash-trio.jpg";
