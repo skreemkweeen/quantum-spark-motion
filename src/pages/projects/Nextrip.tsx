@@ -1,1002 +1,951 @@
-import { Link } from "react-router-dom";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/sections/Footer";
-import { Reveal } from "@/components/Reveal";
-import { Parallax } from "@/components/Parallax";
-import { ProjectFooterRibbon } from "@/components/ProjectFooterRibbon";
-import { Section, Bezel } from "@/components/nextrip/SectionFrame";
-import { NMark, NWordmark } from "@/components/nextrip/NMark";
-import { UserFlowDiagram } from "@/components/nextrip/UserFlowDiagram";
-import { Atmosphere, Device } from "@/components/nextrip/Atmosphere";
-import { CursorGlow, ScrollProgress, SectionRail } from "@/components/nextrip/CinematicLayers";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
-import heroJet from "@/assets/nextrip/hero-jet-top.png";
-import phoneSearch from "@/assets/nextrip/phone-search.png";
-import splashTrio from "@/assets/nextrip/splash-trio.jpg";
-import phoneMercedes from "@/assets/nextrip/phone-mercedes.png";
-import bali from "@/assets/nextrip/bali.jpg";
-import clouds from "@/assets/nextrip/clouds.png";
-import phonesRow from "@/assets/nextrip/phones-row.jpg";
+/* =========================================================================
+   NEXTRIPT — editorial cinematic case study
+   Cormorant Garamond + DM Mono · Pure CSS visuals · Framer Motion reveals
+   ========================================================================= */
 
-const Ghost = ({
+const C = {
+  black: "#080808",
+  s1: "#111111",
+  s2: "#191919",
+  s3: "#222222",
+  border: "rgba(255,255,255,0.06)",
+  text: "#F0EDE8",
+  muted: "#6B6B6B",
+  ghost: "#2E2E2E",
+  accent: "#C8B89A",
+};
+
+const display: React.CSSProperties = {
+  fontFamily: "'Cormorant Garamond', serif",
+  fontWeight: 900,
+  letterSpacing: "-0.04em",
+  lineHeight: 0.9,
+  color: C.text,
+};
+const headline: React.CSSProperties = {
+  fontFamily: "'Cormorant Garamond', serif",
+  fontStyle: "italic",
+  fontWeight: 400,
+  color: C.text,
+  letterSpacing: "-0.01em",
+  lineHeight: 1.1,
+};
+const label: React.CSSProperties = {
+  fontFamily: "'DM Mono', monospace",
+  textTransform: "uppercase",
+  letterSpacing: "0.18em",
+  fontSize: "0.65rem",
+  color: C.muted,
+};
+const body: React.CSSProperties = {
+  fontFamily: "'DM Mono', monospace",
+  fontWeight: 400,
+  fontSize: "0.8rem",
+  lineHeight: 1.8,
+  color: C.muted,
+};
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+/* ---------- Reveal helper ---------- */
+const Reveal = ({
   children,
-  className = "",
-  align = "center",
+  delay = 0,
+  className,
+  y = 30,
 }: {
-  children: string;
+  children: ReactNode;
+  delay?: number;
   className?: string;
-  align?: "left" | "center" | "right";
-}) => (
+  y?: number;
+}) => {
+  const { ref, inView } = useInView({ threshold: 0.15, triggerOnce: true });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.9, delay, ease }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+/* ---------- Custom cursor ---------- */
+const Cursor = () => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const el = ref.current;
+    if (!el) return;
+    let raf = 0;
+    let tx = 0, ty = 0, cx = 0, cy = 0;
+    const tick = () => {
+      cx += (tx - cx) * 0.25;
+      cy += (ty - cy) * 0.25;
+      el.style.transform = `translate3d(${cx - 5}px, ${cy - 5}px, 0)`;
+      raf = requestAnimationFrame(tick);
+    };
+    const onMove = (e: MouseEvent) => { tx = e.clientX; ty = e.clientY; };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(raf); };
+  }, []);
+  return (
+    <div
+      ref={ref}
+      aria-hidden
+      className="pointer-events-none fixed left-0 top-0 z-[100] h-2.5 w-2.5 rounded-full"
+      style={{ background: "#fff", mixBlendMode: "difference", willChange: "transform" }}
+    />
+  );
+};
+
+/* ---------- Grain overlay ---------- */
+const Grain = () => (
   <div
     aria-hidden
-    className={`pointer-events-none select-none absolute inset-x-0 font-medium tracking-[-0.04em] nx-chrome-text opacity-[0.06] ${
-      align === "left" ? "text-left pl-[6%]" : align === "right" ? "text-right pr-[6%]" : "text-center"
-    } ${className}`}
-    style={{ fontSize: "clamp(5rem,18vw,18rem)", lineHeight: 0.82 }}
-  >
-    {children}
-  </div>
+    className="pointer-events-none fixed inset-0 z-[90]"
+    style={{
+      opacity: 0.03,
+      backgroundImage:
+        "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+    }}
+  />
 );
 
-const GlassCard = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+/* ---------- Top scroll progress ---------- */
+const ScrollBar = () => {
+  const { scrollYProgress } = useScroll();
+  const sx = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.2 });
+  return (
+    <motion.div
+      aria-hidden
+      className="pointer-events-none fixed left-0 right-0 top-0 z-[95] h-px origin-left"
+      style={{ scaleX: sx, background: C.accent }}
+    />
+  );
+};
+
+/* ---------- Plane SVG ---------- */
+const Plane = ({ size = 64, stroke = C.text }: { size?: number; stroke?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none" aria-hidden>
+    <path
+      d="M32 4 L34 28 L58 40 L58 44 L34 38 L33 54 L40 58 L40 60 L32 58 L24 60 L24 58 L31 54 L30 38 L6 44 L6 40 L30 28 Z"
+      stroke={stroke}
+      strokeWidth="0.8"
+      fill="none"
+    />
+  </svg>
+);
+
+/* ---------- Phone frame ---------- */
+const Phone = ({
+  w = 160,
+  h = 320,
+  children,
+  className = "",
+  scale = 1,
+  shadow = false,
+  style = {},
+}: {
+  w?: number;
+  h?: number;
+  children?: ReactNode;
+  className?: string;
+  scale?: number;
+  shadow?: boolean;
+  style?: React.CSSProperties;
+}) => (
   <div
-    className={`group relative rounded-2xl border border-white/[0.06] bg-white/[0.015] p-7 backdrop-blur-xl transition-all duration-700 hover:border-white/[0.16] ${className}`}
+    className={`relative ${className}`}
     style={{
-      boxShadow:
-        "inset 0 1px 0 rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.02), 0 40px 80px -40px rgba(0,0,0,0.9), 0 0 120px -60px rgba(220,225,235,0.08)",
+      width: w,
+      height: h,
+      borderRadius: 40,
+      border: "1.5px solid rgba(255,255,255,0.12)",
+      background: "#111",
+      transform: `scale(${scale})`,
+      boxShadow: shadow ? "0 40px 80px rgba(0,0,0,0.8)" : "0 20px 40px rgba(0,0,0,0.6)",
+      overflow: "hidden",
+      willChange: "transform",
+      transition: "transform 200ms ease-out, box-shadow 200ms ease-out",
+      ...style,
     }}
   >
+    {/* notch */}
     <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 rounded-2xl opacity-60"
-      style={{
-        background:
-          "radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255,255,255,0.06), transparent 60%)",
-      }}
+      className="absolute left-1/2 top-2 -translate-x-1/2"
+      style={{ width: w * 0.32, height: 14, borderRadius: 999, background: "#080808" }}
     />
-    <div className="relative">{children}</div>
+    <div className="absolute inset-0 p-4 pt-7">{children}</div>
   </div>
 );
 
-const Hairline = ({ className = "" }: { className?: string }) => (
-  <div className={`h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent ${className}`} />
+/* ---------- N logomark (outlined) ---------- */
+const NMark = ({ size = 120, stroke = C.accent, sw = 2 }: { size?: number; stroke?: string; sw?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" fill="none" aria-hidden>
+    <path d="M18 82 L18 18 L82 82 L82 18" stroke={stroke} strokeWidth={sw} strokeLinecap="square" />
+  </svg>
 );
 
-const TierLabel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
-  <p className={`text-[9px] uppercase tracking-[0.4em] text-white/40 ${className}`}>{children}</p>
-);
+/* =========================================================================
+   PHONE SCREEN VARIANTS (pure CSS / SVG)
+   ========================================================================= */
 
-const Meta = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <div className="text-[8px] uppercase tracking-[0.45em] text-white/35">{label}</div>
-    <div className="mt-2 text-[11px] tracking-[0.05em] text-white/85">{value}</div>
+const ScreenHome = () => (
+  <div className="flex h-full flex-col gap-2.5">
+    <div className="flex items-center justify-between">
+      <span style={{ ...label, fontSize: "0.5rem", color: C.muted }}>HOME</span>
+      <Plane size={12} stroke={C.accent} />
+    </div>
+    <div
+      className="rounded-[2px] p-3"
+      style={{ background: C.s2, border: `1px solid ${C.border}` }}
+    >
+      <div style={{ ...label, fontSize: "0.45rem", color: C.muted }}>FLIGHT · NX 248</div>
+      <div className="mt-1.5 flex items-baseline justify-between" style={{ ...display, fontSize: "0.95rem" }}>
+        <span>JFK</span>
+        <span className="mx-2 flex-1 border-t border-dashed" style={{ borderColor: C.muted, opacity: 0.4 }} />
+        <span>CDG</span>
+      </div>
+      <div className="mt-2 h-px w-full" style={{ background: C.s3 }}>
+        <div className="h-full" style={{ width: "62%", background: C.accent }} />
+      </div>
+    </div>
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="h-1 rounded-sm" style={{ background: C.s2, width: `${100 - i * 12}%` }} />
+    ))}
   </div>
 );
+
+const ScreenSearch = () => (
+  <div className="flex h-full flex-col gap-2.5">
+    <span style={{ ...label, fontSize: "0.5rem" }}>SEARCH</span>
+    {[
+      ["FROM", "JFK"],
+      ["TO", "CDG"],
+      ["DATE", "24 MAY"],
+    ].map(([k, v]) => (
+      <div key={k} className="rounded-[2px] p-2" style={{ background: C.s2, border: `1px solid ${C.border}` }}>
+        <div style={{ ...label, fontSize: "0.42rem", color: C.muted }}>{k}</div>
+        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.7rem", color: C.text, marginTop: 2 }}>{v}</div>
+      </div>
+    ))}
+    <div
+      className="mt-auto rounded-[2px] py-2 text-center"
+      style={{ background: C.accent, color: C.black, ...label, fontSize: "0.55rem", letterSpacing: "0.2em" }}
+    >
+      SEARCH
+    </div>
+  </div>
+);
+
+const ScreenSeats = () => (
+  <div className="flex h-full flex-col gap-2.5">
+    <span style={{ ...label, fontSize: "0.5rem" }}>SEAT MAP</span>
+    <div className="grid grid-cols-4 gap-2 mx-auto mt-3">
+      {Array.from({ length: 20 }).map((_, i) => {
+        const hl = [6, 11, 14].includes(i);
+        return (
+          <div
+            key={i}
+            className="h-3 w-3 rounded-[2px]"
+            style={{
+              background: hl ? C.accent : C.s3,
+              border: `1px solid ${hl ? C.accent : C.border}`,
+            }}
+          />
+        );
+      })}
+    </div>
+    <div className="mt-auto" style={{ ...label, fontSize: "0.45rem", color: C.muted }}>SELECTED · 14C</div>
+  </div>
+);
+
+const ScreenBoarding = () => (
+  <div className="flex h-full flex-col gap-2">
+    <span style={{ ...label, fontSize: "0.5rem" }}>BOARDING</span>
+    <div className="mt-1 flex items-baseline justify-between" style={{ ...display, fontSize: "0.85rem" }}>
+      <span>JFK</span>
+      <span>CDG</span>
+    </div>
+    <div className="my-2 border-t border-dashed" style={{ borderColor: C.muted, opacity: 0.5 }} />
+    <div style={{ ...label, fontSize: "0.45rem" }}>GATE · 22B · SEAT 14C</div>
+    <div className="mt-auto flex h-8 items-end gap-[1.5px]">
+      {Array.from({ length: 26 }).map((_, i) => (
+        <div key={i} style={{ width: 2, height: `${30 + ((i * 13) % 70)}%`, background: C.text }} />
+      ))}
+    </div>
+  </div>
+);
+
+const ScreenStatus = () => (
+  <div className="flex h-full flex-col gap-2">
+    <span style={{ ...label, fontSize: "0.5rem" }}>STATUS</span>
+    <div className="relative mt-2 pl-5">
+      <div className="absolute left-1.5 top-2 bottom-2 w-px" style={{ background: C.s3 }} />
+      {["DEPARTED", "IN FLIGHT", "ARRIVING"].map((s, i) => (
+        <div key={s} className="relative mb-4 last:mb-0">
+          <span
+            className="absolute -left-[18px] top-1 h-2 w-2 rounded-full"
+            style={{ background: i === 1 ? C.accent : C.s3, border: `1px solid ${i === 1 ? C.accent : C.muted}` }}
+          />
+          <div style={{ ...label, fontSize: "0.45rem", color: i === 1 ? C.text : C.muted }}>{s}</div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "0.55rem", color: C.muted, marginTop: 1 }}>
+            {["09:42", "12:18", "16:05"][i]}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const ScreenProfile = () => (
+  <div className="flex h-full flex-col gap-3">
+    <span style={{ ...label, fontSize: "0.5rem" }}>PROFILE</span>
+    <div
+      className="mx-auto h-12 w-12 rounded-full"
+      style={{ background: `linear-gradient(135deg, ${C.s3}, ${C.s2})`, border: `1px solid ${C.border}` }}
+    />
+    <div className="mx-auto h-1.5 w-20 rounded-sm" style={{ background: C.s2 }} />
+    {[100, 75, 60].map((w, i) => (
+      <div key={i} className="h-1 rounded-sm" style={{ background: C.s2, width: `${w}%` }} />
+    ))}
+  </div>
+);
+
+const ScreenCalendar = () => (
+  <div className="flex h-full flex-col gap-2">
+    <span style={{ ...label, fontSize: "0.55rem" }}>MAY 2024</span>
+    <div className="grid grid-cols-7 gap-1.5 mt-1">
+      {["M","T","W","T","F","S","S"].map((d, i) => (
+        <div key={i} style={{ ...label, fontSize: "0.4rem", textAlign: "center", color: C.muted }}>{d}</div>
+      ))}
+      {Array.from({ length: 28 }).map((_, i) => {
+        const hl = [12, 13, 19].includes(i);
+        return (
+          <div
+            key={i}
+            className="grid aspect-square place-items-center rounded-[2px]"
+            style={{
+              background: hl ? C.accent : "transparent",
+              color: hl ? C.black : C.muted,
+              fontFamily: "'DM Mono', monospace",
+              fontSize: "0.5rem",
+              border: hl ? "none" : `1px solid ${C.border}`,
+            }}
+          >
+            {i + 1}
+          </div>
+        );
+      })}
+    </div>
+    <div
+      className="mt-auto inline-flex items-center gap-1.5 self-start rounded-full px-2 py-1"
+      style={{ border: `1px solid ${C.border}` }}
+    >
+      <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#7ED957", boxShadow: "0 0 6px #7ED957" }} />
+      <span style={{ ...label, fontSize: "0.4rem", color: C.text }}>OFFLINE READY</span>
+    </div>
+  </div>
+);
+
+/* ---------- Wireframe phone ---------- */
+const Wireframe = ({ variant }: { variant: number }) => {
+  const blocks: number[][] = [
+    [60, 30, 80, 40],
+    [40, 70, 50, 60],
+    [80, 50, 30, 70],
+    [50, 80, 60, 40],
+    [70, 40, 80, 50],
+    [40, 60, 70, 80],
+    [60, 50, 40, 70],
+    [80, 30, 60, 50],
+  ];
+  const b = blocks[variant % blocks.length];
+  return (
+    <div className="flex h-full flex-col gap-1.5">
+      <div className="h-2 rounded-sm" style={{ background: C.s3, width: `${b[0]}%` }} />
+      <div className="h-10 rounded-sm" style={{ background: C.s2 }} />
+      <div className="h-1.5 rounded-sm" style={{ background: C.s3, width: `${b[1]}%` }} />
+      <div className="h-1.5 rounded-sm" style={{ background: C.s3, width: `${b[2]}%` }} />
+      <div className="mt-auto h-6 rounded-sm" style={{ background: C.s2, width: `${b[3]}%` }} />
+    </div>
+  );
+};
+
+/* =========================================================================
+   PAGE
+   ========================================================================= */
 
 const Nextrip = () => {
   return (
     <div
-      className="min-h-screen text-white"
-      style={{ background: "#050508" }}
+      className="relative min-h-screen overflow-x-hidden"
+      style={{ background: C.black, color: C.text, scrollBehavior: "smooth", cursor: "none" }}
     >
-      {/* Atmospheric layers */}
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(255,255,255,0.05), transparent 70%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none fixed inset-0 z-0 opacity-[0.07] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-        }}
-      />
+      <style>{`html { scroll-behavior: smooth; } html::-webkit-scrollbar { display: none; } html { scrollbar-width: none; } a, button { cursor: none; }`}</style>
+      <Cursor />
+      <Grain />
+      <ScrollBar />
 
-      <Nav />
-      <ScrollProgress />
-      <CursorGlow />
-      <SectionRail />
+      {/* ===== Flat top nav ===== */}
+      <nav className="fixed left-0 right-0 top-0 z-[80] flex items-center justify-between px-8 py-6">
+        <a href="/" style={{ ...label, color: C.text }}>← INDEX</a>
+        <div style={{ ...label, color: C.text }}>NEXTRIPT</div>
+        <div className="flex gap-6">
+          <a href="#work" style={label}>WORK</a>
+          <a href="#contact" style={label}>CONTACT</a>
+        </div>
+      </nav>
 
-      <main className="relative z-10 pt-24">
-        {/* ===== 01 HERO ===== */}
-        <section id="hero" className="relative overflow-hidden px-6 pb-48 pt-16 md:pb-56 lg:pb-72">
-          <Atmosphere variant="hero" />
-          {/* deeper cinematic light bloom behind jet */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 38% 55% at 47% 58%, rgba(220,228,240,0.10), transparent 70%)",
-            }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[58%] -translate-x-1/2 -translate-y-1/2"
-            style={{
-              width: "70vw",
-              height: "70vw",
-              maxWidth: 1100,
-              maxHeight: 1100,
-              background:
-                "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05), transparent 60%)",
-              filter: "blur(40px)",
-            }}
-          />
-          {/* faint horizon line */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-[62%] h-px"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.10), transparent)",
-            }}
-          />
-          <div className="relative mx-auto max-w-7xl">
-            <Reveal>
-              <div className="flex flex-wrap items-start justify-between gap-6 text-[9px] uppercase tracking-[0.4em] text-white/40">
-                <Link to="/#work" className="transition-colors hover:text-white/90">← Work</Link>
-                <div className="flex items-center gap-10 md:gap-14">
-                  <Meta label="Name" value="NexTrip" />
-                  <Meta label="Type" value="Travel Platform" />
-                  <Meta label="Year" value="2024" />
-                  <span className="grid h-7 w-7 place-items-center rounded-full border border-white/[0.08] text-white/40">©</span>
-                </div>
-              </div>
-            </Reveal>
+      {/* ============ 1 · HERO ============ */}
+      <Section1Hero />
 
-            <div className="relative mt-28 flex min-h-[82vh] items-center justify-center md:mt-36">
-              <Ghost align="center" className="top-1/2 -translate-y-1/2">nextrip</Ghost>
-              {/* off-axis vertical guide */}
-              <div className="pointer-events-none absolute left-[42%] top-[8%] h-[84%] w-px bg-gradient-to-b from-transparent via-white/[0.06] to-transparent" />
+      {/* ============ 2 · METADATA ============ */}
+      <Section2Meta />
 
-              {/* concentric atmospheric rings */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "min(720px, 80vw)",
-                  height: "min(720px, 80vw)",
-                  borderRadius: "9999px",
-                  border: "1px solid rgba(255,255,255,0.04)",
-                  boxShadow:
-                    "inset 0 0 120px rgba(255,255,255,0.04), 0 0 200px -40px rgba(220,225,235,0.08)",
-                }}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "min(440px, 50vw)",
-                  height: "min(440px, 50vw)",
-                  borderRadius: "9999px",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                }}
-              />
+      {/* ============ 3 · BRAND IDENTITY ============ */}
+      <Section3Identity />
 
-              <Parallax speed={1.05} className="relative z-10 -translate-x-[4%]">
-                <Device className="animate-float-y">
-                  {/* aircraft glow halo */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-[-30%]"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 45% 55% at 50% 50%, rgba(235,240,250,0.16), transparent 65%)",
-                      filter: "blur(50px)",
-                    }}
-                  />
-                  <img
-                    src={heroJet}
-                    alt="NexTrip"
-                    width={620}
-                    height={620}
-                    className="relative mx-auto h-auto w-[clamp(280px,42vw,620px)]"
-                    style={{
-                      filter:
-                        "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(220,230,245,0.18))",
-                    }}
-                  />
-                  {/* under-aircraft floor pool */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-full mt-[-60px] h-[120px] w-[85%] -translate-x-1/2"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 50% 50% at 50% 0%, rgba(0,0,0,0.95), transparent 70%)",
-                      filter: "blur(24px)",
-                    }}
-                  />
-                </Device>
-              </Parallax>
+      {/* ============ 4 · FEATURE STATEMENT ============ */}
+      <Section4Statement />
 
-              {/* N badge — asymmetric counterweight */}
-              <div className="absolute right-[10%] top-[62%] hidden md:block">
-                <div
-                  className="grid h-14 w-14 place-items-center rounded-xl border border-white/[0.08] backdrop-blur-md"
-                  style={{
-                    background: "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01))",
-                    boxShadow:
-                      "inset 0 1px 0 rgba(255,255,255,0.10), 0 20px 40px -20px rgba(0,0,0,0.8), 0 0 40px -10px rgba(220,225,235,0.10)",
-                  }}
-                >
-                  <NMark size={28} />
-                </div>
-              </div>
+      {/* ============ 5 · SCREEN GRID ============ */}
+      <Section5Screens />
 
-              {/* corner editorial markers */}
-              <div className="absolute left-0 top-[12%] hidden text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
-                <div>N 40°42′</div>
-                <div className="mt-1 text-white/15">Altitude · 38,000 ft</div>
-              </div>
-              <div className="absolute bottom-[6%] right-0 hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
-                <div>Mach 0.85</div>
-                <div className="mt-1 text-white/15">Heading · 270°W</div>
-              </div>
-            </div>
+      {/* ============ 6 · SPLIT CALLOUT ============ */}
+      <Section6Split />
 
-            <div className="mt-24 flex items-center justify-between text-[9px] uppercase tracking-[0.4em] text-white/30">
-              <span>40°42′46″N — 74°00′21″W</span>
-              <Hairline className="mx-8 hidden flex-1 md:block" />
-              <span>Est. 2024</span>
-              <Hairline className="mx-8 hidden flex-1 md:block" />
-              <span className="hidden md:inline">© NexTrip</span>
-            </div>
-          </div>
-        </section>
+      {/* ============ 7 · COMPONENT LIBRARY ============ */}
+      <Section7Components />
 
-        {/* ===== 02 INTRO ===== */}
-        <Section index="01" rightMeta={<span>Overview</span>} id="overview">
-          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
-            <Atmosphere variant="editorial" />
-            {/* layered gradient depth */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 50% 60% at 78% 50%, rgba(220,228,240,0.07), transparent 70%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(180,195,220,0.04), transparent 65%)",
-              }}
-            />
-            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-40" />
+      {/* ============ 8 · WIREFRAME FLOW ============ */}
+      <Section8Wireframes />
 
-            {/* asymmetric editorial grid: 5 / 1 / 6 */}
-            <div className="relative grid gap-x-8 gap-y-16 lg:grid-cols-12">
-              {/* Left column — editorial copy stack */}
-              <div className="relative lg:col-span-5 lg:pt-8">
-                <Reveal>
-                  <div className="flex items-center gap-4">
-                    <span className="h-px w-10 bg-white/30" />
-                    <TierLabel>Application · 01</TierLabel>
-                  </div>
-                  <div className="mt-8">
-                    <NWordmark />
-                  </div>
-                  <p className="mt-10 text-[10px] uppercase leading-[1.9] tracking-[0.32em] text-white/45" style={{ maxWidth: "30ch" }}>
-                    An intelligent travel platform<br />composed for the modern traveler.
-                  </p>
-                </Reveal>
+      {/* ============ 9 · HERO RENDERS ============ */}
+      <Section9Renders />
 
-                <Reveal delay={220}>
-                  <div className="mt-24 lg:mt-32">
-                    <TierLabel className="mb-8">Main Task</TierLabel>
-                    <p
-                      className="font-light text-white/75"
-                      style={{
-                        maxWidth: "40ch",
-                        fontSize: "13px",
-                        lineHeight: 1.85,
-                        letterSpacing: "0.01em",
-                      }}
-                    >
-                      Millions of travelers face scattered options and complex planning.
-                      NexTrip brings everything together in one seamless experience — saving
-                      time, offering clarity, and unlocking extraordinary journeys.
-                    </p>
-                    <Hairline className="mt-10 max-w-[14rem]" />
-                  </div>
-                </Reveal>
-              </div>
-
-              {/* Center column — vertical seam + ambient backdrop for the device */}
-              <div className="relative hidden lg:col-span-2 lg:block">
-                <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-white/[0.08] to-transparent" />
-                <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 rotate-90 whitespace-nowrap text-[8px] uppercase tracking-[0.6em] text-white/25 xl:block">
-                  Composed · Considered · Calm
-                </div>
-              </div>
-
-              {/* Right column — pull-quote + floating device */}
-              <div className="relative lg:col-span-5">
-                <Reveal delay={120}>
-                  <div className="lg:max-w-[24ch] lg:translate-x-[-12%]">
-                    <TierLabel className="mb-6">About</TierLabel>
-                    <p
-                      className="font-light tracking-[-0.015em] text-white"
-                      style={{
-                        fontSize: "clamp(1.5rem, 2.4vw, 2.1rem)",
-                        lineHeight: 1.18,
-                      }}
-                    >
-                      NexTrip redefines the way people discover, plan, and{" "}
-                      <span
-                        className="italic"
-                        style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                      >
-                        experience
-                      </span>{" "}
-                      the world.
-                    </p>
-                    <Hairline className="mt-8 max-w-[6rem]" />
-                    <p className="mt-6 text-[10px] uppercase leading-[1.9] tracking-[0.3em] text-white/40" style={{ maxWidth: "32ch" }}>
-                      Cutting-edge technology &nbsp;·&nbsp; human insight &nbsp;·&nbsp; journeys that matter.
-                    </p>
-                  </div>
-                </Reveal>
-
-                {/* sculptural phone — overlaps onto center column for tension */}
-                <Parallax speed={0.92} className="relative mt-20 flex justify-center lg:mt-28 lg:justify-end lg:translate-x-[8%]">
-                  {/* aircraft-style ambient halo */}
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                    style={{
-                      width: "min(520px, 70%)",
-                      height: "min(520px, 70%)",
-                      borderRadius: "9999px",
-                      background:
-                        "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(230,235,245,0.12), transparent 65%)",
-                      filter: "blur(40px)",
-                    }}
-                  />
-                  <Device className="animate-float-y">
-                    <img
-                      src={phoneSearch}
-                      alt="NexTrip search"
-                      loading="lazy"
-                      decoding="async"
-                      width={420}
-                      height={840}
-                      className="relative h-auto w-[clamp(220px,28vw,380px)]"
-                      style={{
-                        filter:
-                          "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 60px rgba(220,230,245,0.14))",
-                      }}
-                    />
-                  </Device>
-
-                  {/* tiny coordinate marker beside the device */}
-                  <div className="absolute -left-6 bottom-6 hidden text-[8px] uppercase tracking-[0.45em] text-white/25 lg:block">
-                    <div>Iframe · 01</div>
-                    <div className="mt-1 text-white/15">Search</div>
-                  </div>
-                </Parallax>
-              </div>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 03 ARCHITECTURE ===== */}
-        <Section index="02" rightMeta={<span>Application Structure</span>} id="architecture">
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
-            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-60" />
-            <Atmosphere variant="editorial" />
-            <div className="relative grid gap-12 lg:grid-cols-12 lg:gap-16">
-              <Reveal className="lg:col-span-3">
-                <div className="space-y-10">
-                  <div>
-                    <TierLabel className="mb-4">MVP</TierLabel>
-                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/75">
-                      <li>— Business flow</li>
-                      <li>— Traveler flow</li>
-                    </ul>
-                  </div>
-                  <Hairline />
-                  <div>
-                    <TierLabel className="mb-4">Coming</TierLabel>
-                    <ul className="space-y-2.5 text-[12px] tracking-[0.05em] text-white/55">
-                      <li>— Tours</li>
-                      <li>— Hotel reservations</li>
-                      <li>— Car reservation</li>
-                      <li>— Concierge</li>
-                      <li>— Integrations</li>
-                    </ul>
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={120} className="lg:col-span-6">
-                <UserFlowDiagram />
-              </Reveal>
-              <Reveal delay={200} className="lg:col-span-3">
-                <div>
-                  <TierLabel className="mb-6">Architecture</TierLabel>
-                  <p className="text-[14px] font-light leading-[1.7] text-white/80" style={{ maxWidth: "30ch" }}>
-                    Application structure — the initial development phase of the architecture process.
-                  </p>
-                  <Hairline className="my-8" />
-                  <p className="text-[11px] leading-[1.75] text-white/45" style={{ maxWidth: "36ch" }}>
-                    A logic of interaction and connection between screens, providing the development team a clear
-                    map of overall functionality before any interface element is designed.
-                  </p>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 04 IDENTITY ===== */}
-        <Section index="03" rightMeta={<span>Identity</span>} id="identity">
-          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
-            <Atmosphere variant="editorial" />
-            {/* cinematic ambient lighting layers */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 45% 60% at 18% 30%, rgba(220,228,240,0.08), transparent 65%), radial-gradient(ellipse 50% 60% at 82% 70%, rgba(180,195,220,0.06), transparent 70%)",
-              }}
-            />
-            <div className="pointer-events-none absolute inset-0 hidden lg:block nx-grid-lines opacity-30" />
-
-            <div className="relative grid gap-8 md:grid-cols-3 md:gap-10 lg:gap-12">
-              {/* Card 1 — Identity */}
-              <GlassCard className="aspect-[3/4] flex-col justify-between flex">
-                <div className="flex items-center gap-3">
-                  <span className="h-px w-6 bg-white/30" />
-                  <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Identity · 01</span>
-                </div>
-                <div className="relative my-auto flex justify-center">
-                  <div
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse 55% 55% at 50% 50%, rgba(230,235,245,0.10), transparent 65%)",
-                      filter: "blur(30px)",
-                    }}
-                  />
-                  <img
-                    src={heroJet}
-                    alt=""
-                    width={300}
-                    height={300}
-                    loading="lazy"
-                    className="relative h-auto w-3/4"
-                    style={{
-                      filter:
-                        "drop-shadow(0 30px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 30px rgba(220,230,245,0.12))",
-                    }}
-                  />
-                </div>
-                <div>
-                  <Hairline className="mb-5 max-w-[5rem]" />
-                  <div className="flex items-end justify-between">
-                    <NWordmark />
-                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/30">Short Points</span>
-                  </div>
-                </div>
-              </GlassCard>
-
-              {/* Card 2 — Mark */}
-              <GlassCard className="aspect-[3/4]">
-                <div className="flex h-full flex-col">
-                  <div className="flex items-center gap-3">
-                    <span className="h-px w-6 bg-white/30" />
-                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Mark · 02</span>
-                  </div>
-                  <div className="relative my-auto flex flex-col items-center justify-center">
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute left-1/2 top-1/2 h-[260px] w-[260px] -translate-x-1/2 -translate-y-1/2 rounded-full"
-                      style={{
-                        background:
-                          "radial-gradient(circle at 50% 50%, rgba(235,240,250,0.14), transparent 60%)",
-                        filter: "blur(28px)",
-                      }}
-                    />
-                    <NMark size={200} className="relative drop-shadow-[0_40px_60px_rgba(0,0,0,0.8)]" />
-                  </div>
-                  <div>
-                    <Hairline className="mb-5 max-w-[5rem]" />
-                    <div className="flex items-center justify-between">
-                      <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Scale</span>
-                      <div className="flex items-center gap-3 text-white/30">
-                        <NMark size={12} />
-                        <span className="text-[8px]">·</span>
-                        <NMark size={16} />
-                        <span className="text-[8px]">·</span>
-                        <NMark size={20} />
-                        <span className="text-[8px]">·</span>
-                        <NMark size={24} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
-
-              {/* Right column — Palette + Typography */}
-              <div className="flex aspect-[3/4] flex-col gap-8 md:gap-10">
-                <GlassCard className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="h-px w-6 bg-white/30" />
-                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Palette · 03</span>
-                  </div>
-                  <div className="mt-7 flex h-14 gap-1.5 overflow-hidden rounded-md">
-                    {["#0D0D11", "#2A2A34", "#8A8A92", "#CDCDD3", "#F5F5F7"].map((c) => (
-                      <div
-                        key={c}
-                        className="flex-1"
-                        style={{
-                          background: c,
-                          boxShadow:
-                            "inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4)",
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <div className="mt-4 flex justify-between text-[8px] uppercase tracking-[0.3em] text-white/30">
-                    <span>0D0D11</span><span>2A2A34</span><span>8A8A92</span><span>CDCDD3</span><span>F5F5F7</span>
-                  </div>
-                  <Hairline className="mt-6 max-w-[5rem]" />
-                  <div className="mt-5 text-[9px] uppercase tracking-[0.35em] text-white/45">
-                    WCAG <span className="ml-2 text-white/85">Pass</span>
-                  </div>
-                </GlassCard>
-
-                <GlassCard className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="h-px w-6 bg-white/30" />
-                    <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Typography · 04</span>
-                  </div>
-                  <div className="mt-6 flex items-end gap-7">
-                    <div
-                      className="font-light leading-none text-white/95"
-                      style={{
-                        fontFamily: "Georgia, serif",
-                        fontSize: "clamp(3.5rem, 6vw, 5rem)",
-                        textShadow: "0 0 40px rgba(220,230,245,0.15)",
-                      }}
-                    >
-                      Aa
-                    </div>
-                    <div className="pb-2">
-                      <div className="text-[15px] tracking-[-0.01em] text-white">Satoshi</div>
-                      <ul className="mt-3 space-y-1.5 text-[10px] uppercase tracking-[0.3em] text-white/55">
-                        <li>Regular</li>
-                        <li>Medium</li>
-                        <li>SemiBold</li>
-                        <li>Bold</li>
-                      </ul>
-                    </div>
-                  </div>
-                </GlassCard>
-              </div>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 05 SPLASH ===== */}
-        <Section index="04" rightMeta={<span>Splash Screens</span>} id="splash">
-          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
-            <Atmosphere variant="wide" />
-
-            {/* layered cinematic backdrop */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 60% 70% at 50% 45%, rgba(220,228,240,0.10), transparent 65%), radial-gradient(ellipse 35% 45% at 18% 75%, rgba(180,195,220,0.06), transparent 70%), radial-gradient(ellipse 35% 45% at 82% 25%, rgba(200,210,230,0.05), transparent 70%)",
-              }}
-            />
-            {/* deep stage vignette */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0"
-              style={{
-                boxShadow:
-                  "inset 0 200px 200px -120px rgba(0,0,0,0.95), inset 0 -200px 200px -120px rgba(0,0,0,0.95), inset 200px 0 200px -160px rgba(0,0,0,0.85), inset -200px 0 200px -160px rgba(0,0,0,0.85)",
-              }}
-            />
-            {/* caustic light streak */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-x-1/4 top-[20%] h-[60%] -rotate-[18deg] opacity-[0.06]"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.7) 50%, transparent 100%)",
-                filter: "blur(80px)",
-              }}
-            />
-
-            <Ghost align="left" className="top-1/2 -translate-y-1/2">NEXTRIP</Ghost>
-
-            {/* editorial header */}
-            <div className="relative mb-20 flex items-end justify-between md:mb-28">
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="h-px w-10 bg-white/30" />
-                  <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Splash · 04</span>
-                </div>
-                <p className="mt-6 max-w-[28ch] text-[10px] uppercase leading-[1.9] tracking-[0.32em] text-white/45">
-                  Three frames · one identity<br />unfolding in motion.
-                </p>
-              </div>
-              <div className="hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/25 md:block">
-                <div>Render · 1×</div>
-                <div className="mt-1 text-white/15">Studio Light · Cool</div>
-              </div>
-            </div>
-
-            {/* device stage */}
-            <Parallax speed={0.92} className="relative">
-              {/* concentric stage rings */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "min(900px, 90%)",
-                  height: "min(900px, 90%)",
-                  borderRadius: "9999px",
-                  border: "1px solid rgba(255,255,255,0.04)",
-                  boxShadow:
-                    "inset 0 0 160px rgba(255,255,255,0.04), 0 0 240px -60px rgba(220,228,240,0.10)",
-                }}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "min(620px, 70%)",
-                  height: "min(620px, 70%)",
-                  borderRadius: "9999px",
-                  border: "1px solid rgba(255,255,255,0.05)",
-                }}
-              />
-              {/* primary atmospheric halo */}
-              <div
-                aria-hidden
-                className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  width: "min(820px, 85%)",
-                  height: "min(520px, 60%)",
-                  background:
-                    "radial-gradient(ellipse 50% 50% at 50% 50%, rgba(230,236,248,0.18), transparent 65%)",
-                  filter: "blur(60px)",
-                }}
-              />
-
-              <div className="relative">
-                <img
-                  src={splashTrio}
-                  alt="Splash screens"
-                  loading="lazy"
-                  decoding="async"
-                  width={1600}
-                  height={1100}
-                  className="relative mx-auto h-auto w-full max-w-5xl"
-                  style={{
-                    filter:
-                      "drop-shadow(0 30px 50px rgba(0,0,0,0.85)) drop-shadow(0 80px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 80px rgba(220,230,245,0.16))",
-                  }}
-                />
-                {/* floor pool grounding shadow */}
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute left-1/2 top-full -mt-10 h-[120px] w-[78%] -translate-x-1/2"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 50% 50% at 50% 0%, rgba(0,0,0,0.95), transparent 70%)",
-                    filter: "blur(28px)",
-                  }}
-                />
-              </div>
-            </Parallax>
-
-            {/* editorial footer rail */}
-            <div className="relative mt-24 flex items-center justify-between text-[8px] uppercase tracking-[0.45em] text-white/30 md:mt-32">
-              <span>Frame 01 · Welcome</span>
-              <Hairline className="mx-8 hidden flex-1 md:block" />
-              <span>Frame 02 · Brand</span>
-              <Hairline className="mx-8 hidden flex-1 md:block" />
-              <span>Frame 03 · Enter</span>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 06 DESCRIPTION ===== */}
-        <Section index="05" rightMeta={<span>Description</span>} id="description">
-          <div className="relative mx-auto max-w-7xl px-6 py-40 md:py-52 lg:py-64">
-            <Atmosphere variant="wide" />
-            <img
-              src={clouds}
-              alt=""
-              loading="lazy"
-              width={1920}
-              height={800}
-              className="pointer-events-none absolute -left-10 top-10 h-auto w-1/2 opacity-50 mix-blend-screen"
-            />
-            <img
-              src={clouds}
-              alt=""
-              loading="lazy"
-              width={1920}
-              height={800}
-              className="pointer-events-none absolute -right-10 bottom-10 h-auto w-1/2 -scale-x-100 opacity-35 mix-blend-screen"
-            />
-            <Reveal>
-              <div className="relative mx-auto max-w-3xl text-center">
-                <TierLabel className="mb-8">Description</TierLabel>
-                <h3
-                  className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
-                  style={{ fontSize: "clamp(1.7rem,3.6vw,2.8rem)" }}
-                >
-                  Simplified and personalized experience provides the highest degree of comfort to users
-                </h3>
-                <Hairline className="mx-auto mt-10 max-w-[120px]" />
-                <p className="mx-auto mt-8 max-w-md text-[12px] leading-[1.75] text-white/50">
-                  We have done a lot of research on the leading applications in this industry, took into
-                  account all their shortcomings and made the best solution.
-                </p>
-                <div className="mt-14 flex justify-center">
-                  <NWordmark />
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </Section>
-
-        {/* ===== 07 USERFLOW STATEMENT + CAR ===== */}
-        <Section index="06" rightMeta={<span>Userflow</span>} id="userflow">
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-44 lg:py-56">
-            <Atmosphere variant="device" />
-            <div className="relative grid gap-16 lg:grid-cols-12 lg:items-center lg:gap-24">
-              {/* Left: editorial caption stack */}
-              <Reveal className="lg:col-span-5 lg:pl-6">
-                <div>
-                  <TierLabel className="mb-6">Userflow</TierLabel>
-                  <h3
-                    className="font-light leading-[1.15] tracking-[-0.02em] text-white/95"
-                    style={{ fontSize: "clamp(1.6rem,3.2vw,2.4rem)" }}
-                  >
-                    Traveler version offers extensive functionality and offers, as well as great deals.
-                  </h3>
-                  <Hairline className="my-8 max-w-[120px]" />
-                  <p className="text-[12px] leading-[1.75] text-white/50" style={{ maxWidth: "38ch" }}>
-                    Choosing a travel option is now effortless — curated rides, transparent pricing, and a
-                    flow that respects the user's time.
-                  </p>
-                </div>
-              </Reveal>
-              {/* Right: tilted phone */}
-              <Parallax speed={0.92} className="lg:col-span-7">
-                <Device className="block lg:translate-x-[6%]">
-                  <img
-                    src={phoneMercedes}
-                    alt="Mercedes booking"
-                    loading="lazy"
-                    decoding="async"
-                    width={900}
-                    height={1400}
-                    className="mx-auto h-auto w-[clamp(260px,38vw,520px)] -rotate-3 drop-shadow-[0_80px_100px_rgba(0,0,0,0.95)] transition-transform duration-[900ms] hover:rotate-0"
-                    style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }}
-                  />
-                </Device>
-              </Parallax>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 08 BALI TOUR ===== */}
-        <Section index="07" rightMeta={<span>Tour Screen</span>} id="tour">
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
-            <Atmosphere variant="editorial" />
-            <div className="relative grid gap-12 md:grid-cols-[1fr_1.6fr_0.9fr] md:items-center md:gap-16">
-              <Reveal>
-                <div>
-                  <TierLabel className="mb-4">Destination</TierLabel>
-                  <h4 className="text-[clamp(1.6rem,2.6vw,2.2rem)] font-light leading-[1.05] tracking-[-0.02em]">
-                    Bali —<br /><span className="text-white/55">Indonesia</span>
-                  </h4>
-                  <Hairline className="my-6 max-w-[80px]" />
-                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/55">
-                    <span className="text-white/80">★★★★☆</span>
-                    <span>2,450 REVIEWS</span>
-                  </div>
-                </div>
-              </Reveal>
-              <Parallax speed={0.95}>
-                <div className="relative overflow-hidden rounded-xl">
-                  <img
-                    src={bali}
-                    alt="Bali"
-                    loading="lazy"
-                    decoding="async"
-                    width={1280}
-                    height={800}
-                    className="h-72 w-full object-cover opacity-90 md:h-80"
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 60%, rgba(5,5,8,0.85) 100%)",
-                    }}
-                  />
-                  <div
-                    className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/[0.06]"
-                  />
-                  {/* editorial destination overlay */}
-                  <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-5 text-[8px] uppercase tracking-[0.45em] text-white/70">
-                    <span>08°40′S · 115°12′E</span>
-                    <span>Tour · 07</span>
-                  </div>
-                  <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between p-5">
-                    <div className="text-[8px] uppercase tracking-[0.45em] text-white/65">
-                      <div>Indonesia</div>
-                      <div className="mt-1 text-white/40">Curated · 7 Days</div>
-                    </div>
-                    <div className="h-px w-16 bg-white/40" />
-                  </div>
-                </div>
-              </Parallax>
-              <Reveal delay={150}>
-                <GlassCard>
-                  <div className="mb-3 flex items-center gap-2 text-[10px] tracking-[0.2em] text-white/50">★★★★★</div>
-                  <p className="text-[12px] leading-[1.7] text-white/75">
-                    An unforgettable trip! Bali is absolutely beautiful, the places we visited were
-                    incredible. Highly recommend NexTrip for such amazing experiences.
-                  </p>
-                  <Hairline className="my-5" />
-                  <div className="flex items-center gap-3 text-[10px] tracking-[0.2em] text-white/40">
-                    <div className="h-6 w-6 rounded-full bg-gradient-to-br from-white/20 to-white/5" />
-                    SOPHIA MARTINEZ · 12.06.2024
-                  </div>
-                </GlassCard>
-              </Reveal>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 09 PROFILE / PERSONAS ===== */}
-        <Section index="08" rightMeta={<span>Profile</span>} id="profile">
-          <div className="relative mx-auto max-w-7xl px-6 py-32 md:py-40 lg:py-48">
-            <Atmosphere variant="device" />
-            <div className="relative grid gap-12 md:grid-cols-[1fr_1fr_1fr] md:items-center md:gap-16">
-              <Reveal>
-                <div>
-                  <TierLabel className="mb-6">About</TierLabel>
-                  <p className="text-[14px] font-light leading-[1.7] text-white/85" style={{ maxWidth: "32ch" }}>
-                    The personal profile is equipped with additional settings, flight statistics, as
-                    well as reminders about the upcoming flight.
-                  </p>
-                  <Hairline className="my-8 max-w-[80px]" />
-                  <div className="space-y-3 text-[10px] tracking-[0.25em]">
-                    {[
-                      ["BEGINNER", "rgba(255,255,255,0.55)"],
-                      ["TRAVELER", "rgba(140,160,255,0.85)"],
-                      ["BUSINESSMAN", "rgba(180,140,255,0.85)"],
-                    ].map(([label, color]) => (
-                      <div key={label} className="flex items-center gap-3 text-white/65">
-                        <span className="h-1.5 w-1.5 rounded-full" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
-                        {label}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={120}>
-                <GlassCard className="mx-auto w-full max-w-xs">
-                  <div className="flex items-center justify-between text-[10px] text-white/35">
-                    <span>≡</span>
-                    <NWordmark />
-                    <span>✎</span>
-                  </div>
-                  <div className="mt-6 text-center">
-                    <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-br from-white/25 to-white/5 ring-1 ring-white/10" />
-                    <div className="mt-3 text-[13px] tracking-[0.02em]">Daniel Jackson</div>
-                    <div className="mt-2 inline-block rounded border border-white/15 px-2 py-0.5 text-[9px] tracking-[0.3em] text-white/70">TRAVELER</div>
-                  </div>
-                  <div className="mt-6 grid grid-cols-3 gap-2 text-center text-white/80">
-                    {[["Flights", "5"], ["In air", "32h"], ["Flow", "2k km"]].map(([l, v]) => (
-                      <div key={l} className="rounded-md border border-white/[0.07] bg-white/[0.02] py-3 backdrop-blur-sm">
-                        <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">{l}</div>
-                        <div className="mt-1.5 text-[13px]">{v}</div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-6 rounded-md border border-white/[0.07] bg-white/[0.02] p-3 text-[10px] text-white/60 backdrop-blur-sm">
-                    <div className="text-[8px] uppercase tracking-[0.3em] text-white/35">Upcoming flight</div>
-                    <div className="mt-2.5 flex justify-between text-[10px] tracking-[0.05em]"><span>24 May</span><span>12:30 — 18:00</span><span className="text-white/85">UA114</span></div>
-                  </div>
-                </GlassCard>
-              </Reveal>
-              <Reveal delay={200}>
-                <p className="text-[12px] leading-[1.75] text-white/55" style={{ maxWidth: "34ch" }}>
-                  It is very interesting to know how many hours and distances you have covered over the
-                  entire time. You can brag about this to your friends, or compete with them.
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </Section>
-
-        {/* ===== 10 CLOSING SHELF ===== */}
-        <section id="showcase" className="relative overflow-hidden">
-          <Bezel />
-          {/* editorial header */}
-          <div className="relative mx-auto flex max-w-7xl items-end justify-between px-6 pt-16 pb-10 md:pt-24 md:pb-14">
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="h-px w-10 bg-white/30" />
-                <span className="text-[8px] uppercase tracking-[0.45em] text-white/40">Showcase · 09</span>
-              </div>
-              <h3
-                className="mt-6 max-w-[22ch] font-light leading-[1.1] tracking-[-0.02em] text-white/95"
-                style={{ fontSize: "clamp(1.4rem,2.6vw,2.2rem)" }}
-              >
-                A complete{" "}
-                <span className="italic" style={{ fontFamily: "Georgia, serif" }}>
-                  ecosystem
-                </span>
-                , staged as one continuous frame.
-              </h3>
-            </div>
-            <div className="hidden text-right text-[8px] uppercase tracking-[0.45em] text-white/30 md:block">
-              <div>Final Cut · 04</div>
-              <div className="mt-1 text-white/15">Studio Light · Cool</div>
-            </div>
-          </div>
-          <div className="relative">
-            <Atmosphere variant="wide" />
-            <Parallax speed={0.85}>
-              <img
-                src={phonesRow}
-                alt="NexTrip product showcase"
-                loading="lazy"
-                decoding="async"
-                width={1920}
-                height={1080}
-                className="h-auto w-full"
-                style={{
-                  filter:
-                    "drop-shadow(0 60px 120px rgba(0,0,0,0.95)) drop-shadow(0 0 80px rgba(220,230,245,0.10))",
-                }}
-              />
-            </Parallax>
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#050508] via-transparent to-[#050508]" />
-            <div
-              className="pointer-events-none absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(ellipse 60% 50% at 50% 50%, transparent 30%, rgba(5,5,8,0.7) 100%)",
-              }}
-            />
-          </div>
-          {/* editorial footer rail */}
-          <div className="relative mx-auto flex max-w-7xl items-center justify-between px-6 pb-20 pt-10 text-[8px] uppercase tracking-[0.45em] text-white/30 md:pb-28">
-            <span>End · NexTrip</span>
-            <Hairline className="mx-8 hidden flex-1 md:block" />
-            <span>Designed · Composed · Delivered</span>
-            <Hairline className="mx-8 hidden flex-1 md:block" />
-            <span>© 2024</span>
-          </div>
-        </section>
-      </main>
-
-      <ProjectFooterRibbon
-        title="NEXTRIP"
-        phrases={["TRAVEL PLATFORM", "MOBILE EXPERIENCE", "FLIGHT SYSTEM"]}
-      />
-      <Footer />
+      {/* ============ 10 · CLOSING ============ */}
+      <Section10Closing />
     </div>
   );
 };
+
+/* ====================== SECTION 1 ====================== */
+const Section1Hero = () => (
+  <section className="relative flex min-h-screen flex-col items-center justify-center px-6">
+    <motion.div
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.2, ease }}
+      className="relative flex flex-col items-center"
+    >
+      <Plane size={72} stroke={C.text} />
+      <div className="mt-3 w-px" style={{ height: "30vh", background: `linear-gradient(180deg, ${C.text}, transparent)` }} />
+    </motion.div>
+
+    <div className="relative mt-[-12vh] flex w-full justify-center">
+      {/* ghost layer underneath */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 select-none text-center"
+        style={{ ...display, fontSize: "12vw", color: C.ghost }}
+      >
+        nextript
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1.2, delay: 0.4, ease }}
+        className="relative text-center"
+        style={{ ...display, fontSize: "12vw" }}
+      >
+        ne—trip
+      </motion.div>
+    </div>
+
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.6, ease }}
+      className="mt-10"
+      style={{ ...label, color: C.text }}
+    >
+      CASE STUDY — TRAVEL APP DESIGN — 2024
+    </motion.div>
+
+    <motion.div
+      animate={{ opacity: [0.3, 1, 0.3] }}
+      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      className="absolute bottom-10"
+      style={label}
+    >
+      ↓ SCROLL
+    </motion.div>
+  </section>
+);
+
+/* ====================== SECTION 2 ====================== */
+const Section2Meta = () => {
+  const items = [
+    ["ROLE", "Lead Designer"],
+    ["TYPE", "Mobile App"],
+    ["YEAR", "2024"],
+    ["PLATFORM", "iOS / Android"],
+  ];
+  return (
+    <section
+      className="w-full px-8 py-12"
+      style={{ background: C.s1, borderTop: `1px solid ${C.border}`, borderBottom: `1px solid ${C.border}` }}
+    >
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-y-10 md:grid-cols-4">
+        {items.map(([k, v], i) => (
+          <Reveal key={k} delay={i * 0.1}>
+            <div style={label}>{k}</div>
+            <div className="mt-3" style={{ fontFamily: "'DM Mono', monospace", color: C.text, fontSize: "0.95rem" }}>
+              {v}
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+/* ====================== SECTION 3 ====================== */
+const Section3Identity = () => (
+  <section className="px-8 py-32 md:py-48">
+    <div className="mx-auto grid max-w-6xl grid-cols-1 gap-16 md:grid-cols-[2fr_3fr] md:gap-20">
+      <Reveal>
+        <h2 style={{ ...headline, fontSize: "clamp(2rem, 4vw, 4rem)" }}>
+          A system built for<br />the traveler in motion.
+        </h2>
+        <p className="mt-10" style={{ ...body, maxWidth: "38ch" }}>
+          Nextript is a quiet operating system for travel — composing the complexity of
+          flight, identity, and time into a single, considered surface. Built for those
+          who measure their journeys not in miles, but in moments.
+        </p>
+      </Reveal>
+
+      <Reveal delay={0.2} y={40}>
+        <div
+          className="p-10"
+          style={{ background: C.s2, border: `2px solid ${C.border}`, borderRadius: 4 }}
+        >
+          <div className="flex items-start justify-between">
+            <NMark size={120} stroke={C.accent} sw={2} />
+            <div className="text-right" style={label}>
+              MARK<br /><span style={{ color: C.text, marginTop: 4, display: "block" }}>01 / 02</span>
+            </div>
+          </div>
+          <div className="mt-8" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "2rem", color: C.text }}>
+            nextript
+          </div>
+          <div className="mt-10" style={label}>PALETTE</div>
+          <div className="mt-3 flex gap-2">
+            {[
+              ["#080808", "BLACK"],
+              ["#191919", "S—2"],
+              ["#6B6B6B", "MUTED"],
+              ["#F0EDE8", "WHITE"],
+              [C.accent, "SAND"],
+            ].map(([c, n]) => (
+              <div key={n} className="flex flex-col items-center">
+                <div style={{ width: 10, height: 32, background: c, border: `1px solid ${C.border}` }} />
+                <div className="mt-2" style={{ ...label, fontSize: "0.45rem" }}>{n}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 flex items-baseline gap-4">
+            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400, fontSize: "72px", color: C.text, lineHeight: 1 }}>
+              Aa
+            </div>
+            <div style={{ fontFamily: "'DM Mono', monospace", color: C.muted, fontSize: "0.85rem" }}>
+              Bb Cc Dd Ee
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ====================== SECTION 4 ====================== */
+const Section4Statement = () => {
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
+  return (
+    <section ref={ref} className="relative overflow-hidden px-8 py-40">
+      {/* CSS clouds */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle 280px at 15% 30%, rgba(255,255,255,0.025), transparent 70%), radial-gradient(circle 360px at 80% 60%, rgba(255,255,255,0.02), transparent 70%), radial-gradient(circle 200px at 50% 85%, rgba(255,255,255,0.015), transparent 70%), radial-gradient(circle 240px at 60% 15%, rgba(255,255,255,0.018), transparent 70%)",
+        }}
+      />
+      <div className="relative mx-auto max-w-5xl text-center">
+        <Reveal><div style={label}>CORE EXPERIENCE</div></Reveal>
+        <Reveal delay={0.1}>
+          <h2 className="mx-auto mt-8 max-w-[18ch]" style={{ ...headline, fontSize: "clamp(2rem, 6vw, 5rem)" }}>
+            Simplified transactions and instant awareness to provide the travel engine of your world.
+          </h2>
+        </Reveal>
+
+        <div className="mt-24 flex items-end justify-center gap-8 md:gap-12">
+          <motion.div
+            initial={{ opacity: 0, x: -60 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.3, ease }}
+          >
+            <Phone>
+              <div className="grid h-full place-items-center"><NMark size={64} stroke={C.muted} sw={1.4} /></div>
+            </Phone>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.4, ease }}
+          >
+            <Phone scale={1.1} shadow>
+              <div className="grid h-full place-items-center"><NMark size={72} stroke={C.accent} sw={1.6} /></div>
+            </Phone>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.9, delay: 0.3, ease }}
+          >
+            <Phone>
+              <div className="grid h-full place-items-center"><NMark size={64} stroke={C.muted} sw={1.4} /></div>
+            </Phone>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ====================== SECTION 5 ====================== */
+const Section5Screens = () => {
+  const screens: { name: string; render: () => JSX.Element }[] = [
+    { name: "HOME DASHBOARD", render: ScreenHome },
+    { name: "FLIGHT SEARCH", render: ScreenSearch },
+    { name: "SEAT MAP", render: ScreenSeats },
+    { name: "BOARDING PASS", render: ScreenBoarding },
+    { name: "FLIGHT STATUS", render: ScreenStatus },
+    { name: "PROFILE", render: ScreenProfile },
+  ];
+  return (
+    <section className="px-8 py-32">
+      <div className="mx-auto max-w-6xl">
+        <Reveal><div style={label}>APP SCREENS</div></Reveal>
+        <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 md:grid-cols-3">
+          {screens.map((s, i) => {
+            const Render = s.render;
+            return (
+              <Reveal key={s.name} delay={i * 0.08}>
+                <div className="group flex flex-col items-center">
+                  <div className="transition-transform duration-200 group-hover:-translate-y-2">
+                    <Phone><Render /></Phone>
+                  </div>
+                  <div className="mt-6" style={label}>{s.name}</div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+/* ====================== SECTION 6 ====================== */
+const Section6Split = () => (
+  <section className="px-8 py-32" style={{ background: C.s1 }}>
+    <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 md:grid-cols-[55fr_45fr] md:gap-24">
+      <Reveal>
+        <div className="flex justify-center md:justify-start">
+          <Phone w={220} h={440}><ScreenCalendar /></Phone>
+        </div>
+      </Reveal>
+      <Reveal delay={0.15}>
+        <div style={label}>TRAVELER SECTION</div>
+        <h3 className="mt-6" style={{ ...headline, fontSize: "clamp(1.6rem,3vw,3rem)" }}>
+          Calendar functionality with full offline use.
+        </h3>
+        <p className="mt-8" style={{ ...body, maxWidth: "42ch" }}>
+          Plans persist beyond the network. Itineraries, boarding passes, and timing
+          remain accessible on the ground — composed for the moments connectivity
+          fails the traveler.
+        </p>
+        <div className="mt-10 flex flex-wrap gap-3">
+          {["340MS AVG LOAD", "0 NETWORK CALLS"].map((p) => (
+            <span
+              key={p}
+              className="rounded-full px-3 py-1.5"
+              style={{ ...label, color: C.text, border: `1px solid ${C.border}` }}
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ====================== SECTION 7 ====================== */
+const Section7Components = () => {
+  const tile = (children: ReactNode, label_: string) => (
+    <div
+      className="flex flex-col justify-between p-5"
+      style={{ background: C.s2, border: `1px solid ${C.border}`, minHeight: 180 }}
+    >
+      <div className="flex flex-1 items-center justify-center">{children}</div>
+      <div className="mt-4" style={label}>{label_}</div>
+    </div>
+  );
+
+  return (
+    <section className="px-8 py-32">
+      <div className="mx-auto max-w-6xl">
+        <Reveal><div style={label}>DESIGN COMPONENTS</div></Reveal>
+        <Reveal delay={0.1}>
+          <div
+            className="mt-12 grid gap-px"
+            style={{
+              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
+              background: C.border,
+              border: `1px solid ${C.border}`,
+            }}
+          >
+            {tile(
+              <button
+                className="rounded-sm px-4 py-2"
+                style={{ background: C.accent, color: C.black, ...label, fontSize: "0.55rem" }}
+              >
+                CONFIRM
+              </button>,
+              "PRIMARY BUTTON",
+            )}
+            {tile(
+              <button
+                className="rounded-sm px-4 py-2"
+                style={{ ...label, fontSize: "0.55rem", color: C.text, border: `1px solid ${C.text}` }}
+              >
+                CANCEL
+              </button>,
+              "GHOST BUTTON",
+            )}
+            {tile(
+              <div className="w-full">
+                <div style={{ ...label, fontSize: "0.45rem" }}>EMAIL</div>
+                <div className="mt-2 pb-1" style={{ borderBottom: `1px solid ${C.muted}`, color: C.muted, fontSize: "0.75rem", fontFamily: "'DM Mono', monospace" }}>
+                  you@nextript.app
+                </div>
+              </div>,
+              "INPUT FIELD",
+            )}
+            {tile(
+              <div className="flex h-6 w-12 items-center rounded-full p-1" style={{ background: C.accent }}>
+                <div className="ml-auto h-4 w-4 rounded-full" style={{ background: C.black }} />
+              </div>,
+              "TOGGLE",
+            )}
+            {tile(
+              <div
+                className="flex w-full items-center justify-around rounded-sm py-3"
+                style={{ background: C.s3, border: `1px solid ${C.border}` }}
+              >
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="h-1 w-1 rounded-full"
+                    style={{ background: i === 2 ? C.accent : C.muted, transform: i === 2 ? "scale(2)" : "scale(1.2)" }}
+                  />
+                ))}
+              </div>,
+              "BOTTOM NAV",
+            )}
+            {tile(
+              <div className="relative">
+                <div className="h-8 w-8 rounded-sm" style={{ background: C.s3, border: `1px solid ${C.border}` }} />
+                <div className="absolute -right-1 -top-1 grid h-4 w-4 place-items-center rounded-full" style={{ background: C.accent, color: C.black, fontSize: "0.5rem", fontFamily: "'DM Mono', monospace" }}>3</div>
+              </div>,
+              "BADGE",
+            )}
+            {tile(
+              <div className="w-full p-3" style={{ background: C.s3, border: `1px solid ${C.border}` }}>
+                <div style={{ ...label, fontSize: "0.45rem" }}>AIR FRANCE · NX 248</div>
+                <div className="mt-2 flex items-baseline justify-between" style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 700, fontSize: "1rem", color: C.text }}>
+                  <span>JFK</span><span>CDG</span>
+                </div>
+                <div className="mt-1 flex justify-between" style={{ ...label, fontSize: "0.42rem" }}>
+                  <span>09:42</span><span>$842</span>
+                </div>
+              </div>,
+              "FLIGHT CARD",
+            )}
+            {tile(
+              <div className="flex w-full justify-around" style={{ borderBottom: `1px solid ${C.border}`, paddingBottom: 6 }}>
+                {["ALL", "UPCOMING", "PAST"].map((t, i) => (
+                  <div key={t} className="relative pb-1.5" style={{ ...label, fontSize: "0.5rem", color: i === 0 ? C.text : C.muted }}>
+                    {t}
+                    {i === 0 && <div className="absolute -bottom-[7px] left-0 right-0 h-px" style={{ background: C.accent }} />}
+                  </div>
+                ))}
+              </div>,
+              "TAB BAR",
+            )}
+            {tile(
+              <span
+                className="rounded-full px-3 py-1"
+                style={{ ...label, fontSize: "0.5rem", color: C.text, background: C.s3, border: `1px solid ${C.border}` }}
+              >
+                BUSINESS
+              </span>,
+              "CHIP / TAG",
+            )}
+            {tile(
+              <div className="w-full space-y-2">
+                {[100, 70, 50].map((w, i) => (
+                  <div key={i} className="h-2 overflow-hidden rounded-sm" style={{ background: C.s3, width: `${w}%` }}>
+                    <div className="nx-shimmer h-full w-full" />
+                  </div>
+                ))}
+              </div>,
+              "SKELETON",
+            )}
+          </div>
+        </Reveal>
+      </div>
+      <style>{`
+        .nx-shimmer { background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent); background-size: 200% 100%; animation: nx-shimmer 1.6s linear infinite; }
+        @keyframes nx-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+      `}</style>
+    </section>
+  );
+};
+
+/* ====================== SECTION 8 ====================== */
+const Section8Wireframes = () => (
+  <section className="px-8 py-32" style={{ background: C.s1 }}>
+    <div className="mx-auto max-w-6xl">
+      <Reveal><div style={label}>USER FLOWS</div></Reveal>
+      <Reveal delay={0.1}>
+        <div className="relative mt-16 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 md:gap-x-10">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="flex flex-col items-center">
+              <Phone w={120} h={240}><Wireframe variant={i} /></Phone>
+              <div className="mt-3" style={{ ...label, fontSize: "0.5rem" }}>STEP · 0{i + 1}</div>
+            </div>
+          ))}
+          {/* Decorative arrows row 1 */}
+          <svg className="pointer-events-none absolute inset-0 hidden h-full w-full md:block" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <g key={`a${i}`}>
+                <line
+                  x1={`${(i + 1) * 25 - 4}%`} y1="20%" x2={`${(i + 1) * 25 + 4}%`} y2="20%"
+                  stroke={C.muted} strokeWidth="1" strokeDasharray="2 3"
+                />
+              </g>
+            ))}
+            {[0, 1, 2].map((i) => (
+              <line
+                key={`b${i}`}
+                x1={`${(i + 1) * 25 - 4}%`} y1="72%" x2={`${(i + 1) * 25 + 4}%`} y2="72%"
+                stroke={C.muted} strokeWidth="1" strokeDasharray="2 3"
+              />
+            ))}
+          </svg>
+        </div>
+      </Reveal>
+    </div>
+  </section>
+);
+
+/* ====================== SECTION 9 ====================== */
+const Section9Renders = () => {
+  const { ref, inView } = useInView({ threshold: 0.2, triggerOnce: true });
+  return (
+    <section ref={ref} className="relative overflow-hidden px-8 py-40">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, rgba(200,184,154,0.06) 0%, transparent 70%)",
+        }}
+      />
+      <div className="relative mx-auto flex max-w-4xl items-center justify-center gap-[-30px]">
+        <motion.div
+          initial={{ opacity: 0, x: -80 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.6, ease }}
+          style={{ zIndex: 1, marginRight: -40 }}
+        >
+          <Phone w={260} h={520} shadow><ScreenHome /></Phone>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, x: 80 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.6, ease }}
+          style={{ zIndex: 2 }}
+        >
+          <Phone w={260} h={520} shadow><ScreenBoarding /></Phone>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+/* ====================== SECTION 10 ====================== */
+const Section10Closing = () => (
+  <section className="relative flex min-h-screen flex-col items-center justify-center px-8 py-32 text-center">
+    <Reveal><div style={label}>PROJECT COMPLETE</div></Reveal>
+    <Reveal delay={0.1}>
+      <h2 className="mt-10" style={{ ...display, fontSize: "8vw" }}>Nextript.</h2>
+    </Reveal>
+    <Reveal delay={0.2}>
+      <div className="mt-8" style={{ ...body, color: C.muted }}>
+        Designed by Element UX — 2024
+      </div>
+    </Reveal>
+    <div className="mt-20 h-px w-full max-w-5xl" style={{ background: C.border }} />
+    <Reveal delay={0.3}>
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-12">
+        {["FIGMA FILE", "PROTOTYPE", "CONTACT"].map((l) => (
+          <a
+            key={l}
+            href="#"
+            className="nx-underline relative"
+            style={{ ...label, color: C.text }}
+          >
+            {l}
+          </a>
+        ))}
+      </div>
+    </Reveal>
+    <style>{`
+      .nx-underline { transition: color 200ms ease-out; }
+      .nx-underline::after {
+        content: ""; position: absolute; left: 0; right: 0; bottom: -6px;
+        height: 1px; background: ${C.accent}; transform: scaleX(0); transform-origin: left;
+        transition: transform 200ms ease-out;
+      }
+      .nx-underline:hover { color: ${C.accent}; }
+      .nx-underline:hover::after { transform: scaleX(1); }
+    `}</style>
+  </section>
+);
 
 export default Nextrip;
