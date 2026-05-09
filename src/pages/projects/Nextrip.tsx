@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { ReactNode, useEffect, useRef } from "react";
@@ -362,47 +363,43 @@ const RAIL = [
   { id: "showcase", label: "Showcase" },
 ];
 const SectionRail = () => {
-  const [active, setActive] = (require as any) ? useStateActive() : [0, () => {}];
   return (
     <nav className="pointer-events-none fixed right-6 top-1/2 z-40 hidden -translate-y-1/2 lg:block">
       <ul className="flex flex-col items-end gap-3.5">
-        {RAIL.map((it, i) => {
-          const on = i === active;
-          return (
-            <li key={it.id} className="pointer-events-auto">
-              <a
-                href={`#${it.id}`}
-                className="flex items-center gap-3"
-                style={{ color: on ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.28)" }}
+        {RAIL.map((it) => (
+          <li key={it.id} className="pointer-events-auto">
+            <a
+              href={`#${it.id}`}
+              className="group flex items-center gap-3"
+              style={{
+                color: "rgba(255,255,255,0.32)",
+              }}
+            >
+              <span
+                style={{
+                  ...labelXS,
+                  color: "inherit",
+                }}
+                className="translate-x-2 opacity-0 transition-all duration-500 group-hover:translate-x-0 group-hover:opacity-100"
               >
-                <span
-                  style={{
-                    ...labelXS,
-                    color: "inherit",
-                    opacity: on ? 1 : 0,
-                    transform: on ? "translateX(0)" : "translateX(8px)",
-                    transition: "all .5s",
-                  }}
-                >
-                  {it.label}
-                </span>
-                <span
-                  className="block h-px transition-all duration-500"
-                  style={{
-                    width: on ? 32 : 14,
-                    background: on ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.25)",
-                    boxShadow: on ? "0 0 8px rgba(220,228,240,0.5)" : "none",
-                  }}
-                />
-              </a>
-            </li>
-          );
-        })}
+                {it.label}
+              </span>
+
+              <span
+                className="block h-px transition-all duration-500 group-hover:w-8"
+                style={{
+                  width: "14px",
+                  background: "rgba(255,255,255,0.25)",
+                }}
+              />
+            </a>
+          </li>
+        ))}
       </ul>
     </nav>
   );
 };
-function useStateActive(): [number, (n: number) => void] {
+[number, (n: number) => void] {
   const { useState, useEffect } = require("react") as typeof import("react");
   const [a, s] = useState(0);
   useEffect(() => {
